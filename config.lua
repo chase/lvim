@@ -130,7 +130,7 @@ lvim.builtin.telescope.defaults.path_display = { 'smart' }
 lvim.builtin.telescope.defaults.layout_config = {
   width = 0.75,
   -- height = 20,
-  prompt_position = "top",
+  prompt_position = "bottom",
   preview_cutoff = 120,
   horizontal = { mirror = false },
   vertical = { mirror = false },
@@ -162,7 +162,7 @@ lvim.builtin.telescope.defaults.mappings = {
 
 -- CMP
 lvim.builtin.cmp.confirm_opts.select = false
-lvim.builtin.cmp.completion.completeopt = "menu,menuone,noselect"
+lvim.builtin.cmp.completion.completeopt = "menu,menuone,noselect,noinsert,preview"
 
 
 -- lvim.builtin.dashboard.custom_header = require('headers.moon3')
@@ -294,10 +294,6 @@ for _, server_name in pairs(custom_servers) do
   if ok then
     require("lvim.lsp.manager").setup(server_name, custom_config)
   end
-end
-
-function UseMinGWClangd()
-  table.insert(lvim.lang.cpp.lsp.setup.cmd, '--query-driver=/home/chase/.local/bin/x86_64-w64-mingw32-*')
 end
 
 -- Additional Plugins
