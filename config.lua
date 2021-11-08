@@ -163,7 +163,18 @@ lvim.builtin.telescope.defaults.mappings = {
 -- CMP
 lvim.builtin.cmp.confirm_opts.select = false
 lvim.builtin.cmp.completion.completeopt = "menu,menuone,noselect,noinsert,preview"
-
+lvim.builtin.cmp.sources = {
+    { name = "nvim_lsp" },
+    -- { name = "cmp_tabnine", max_item_count = 3 },
+    { name = "path", max_item_count = 5 },
+    { name = "luasnip", max_item_count = 3 },
+    { name = "buffer", max_item_count = 5, keyword_length = 5 },
+    { name = "nvim_lua" },
+    -- { name = "calc" },
+    -- { name = "emoji" },
+    -- { name = "treesitter" },
+    { name = "crates" },
+}
 
 -- lvim.builtin.dashboard.custom_header = require('headers.moon3')
 lvim.builtin.dashboard.active = false
