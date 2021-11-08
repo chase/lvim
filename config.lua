@@ -38,7 +38,7 @@ keyset {
   normal_mode = {
       ["<C-s>"] = ":w<cr>",
       ["<C-/>"] = "<Cmd>lua ___comment_call('gc')<CR>g@g@",
-      ["<C-p>"] = "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown({previewer = false, layout_config={width=0.8}}))<cr>",
+      ["<C-p>"] = "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown({previewer = false, layout_config={width=0.8,prompt_position='top'}}))<cr>",
       ["]e"] = "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>",
       ["[e"] = "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>",
       ["<F2>"] = "<cmd>lua vim.lsp.buf.rename()<cr>",
