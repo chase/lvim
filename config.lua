@@ -27,14 +27,7 @@ lvim.colorscheme = "everforest"
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = ","
-local function keyset(keymap)
-  for mode, keys in pairs(keymap) do
-    for key, mapping in pairs(keys) do
-      lvim.keys[mode][key] = mapping
-    end
-  end
-end
-keyset {
+lvim.keys = {
   normal_mode = {
       ["<C-s>"] = ":w<cr>",
       ["<C-/>"] = "<Cmd>lua ___comment_call('gc')<CR>g@g@",
@@ -43,36 +36,28 @@ keyset {
       ["[e"] = "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>",
       ["<F2>"] = "<cmd>lua vim.lsp.buf.rename()<cr>",
       ["<C-`>"] = "<cmd>lua _ToggleTerm()<cr>",
-      ["<A-j>"] = nil,
-      ["<M-j>"] = nil,
-      ["<M-k>"] = nil,
-      ["<A-k>"] = nil,
+      ["<A-j>"] = false,
+      ["<A-k>"] = false,
       ["]c"] = "<cmd>lua require'gitsigns'.next_hunk()<cr>",
       ["[c"] = "<cmd>lua require'gitsigns'.prev_hunk()<cr>",
   },
   visual_mode = {
     ["<C-/>"] = "<esc><cmd>lua ___comment_gc(vim.fn.visualmode())<CR>",
-    ["<M-j>"] = nil,
-    ["<M-k>"] = nil,
-    ["<A-j>"] = nil,
-    ["<A-k>"] = nil,
+    ["<A-j>"] = false,
+    ["<A-k>"] = false,
   },
   visual_block_mode = {
-    ["K"] = nil,
-    ["J"] = nil,
-    ["<M-j>"] = nil,
-    ["<M-k>"] = nil,
-    ["<A-j>"] = nil,
-    ["<A-k>"] = nil,
+    ["K"] = false,
+    ["J"] = false,
+    ["<A-j>"] = false,
+    ["<A-k>"] = false,
   },
   term_mode = {["<C-`>"] = "<cmd>lua _ToggleTerm()<cr>"},
   insert_mode = {
     ["<C-l>"] = "<C-o>$<cmd>silent! LuaSnipUnlinkCurrent<CR>",
     ["<C-j>"] = "<C-o>o<cmd>silent! LuaSnipUnlinkCurrent<CR>",
-    ["<M-j>"] = nil,
-    ["<M-k>"] = nil,
-    ["<A-j>"] = nil,
-    ["<A-k>"] = nil,
+    ["<A-j>"] = false,
+    ["<A-k>"] = false,
   }
 }
 vim.cmd [[
@@ -81,11 +66,12 @@ vim.cmd [[
 -- Whichkey
 lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 lvim.builtin.which_key.mappings["v"] = {":vsplit<cr>", "vsplit"}
-lvim.builtin.which_key.mappings["a"] = {"<cmd>lua require('telescope.builtin').lsp_code_actions(require('telescope.themes').get_cursor())<cr>", "Code Actions"}
+lvim.builtin.which_key.mappings["a"] = {"<cmd>lua require('user.telescope').lsp_code_actions()<cr>", "Code Actions"}
 lvim.builtin.which_key.mappings.g.g = {"<cmd>lua _ToggleGitUI()<cr>", "GitUI"}
 lvim.builtin.which_key.mappings["r"] = { "<cmd>lua require('fzf-lua').oldfiles({cwd_only=true})<CR>", "Recent Files" }
 lvim.builtin.which_key.mappings.j = lvim.builtin.which_key.mappings.b.j
 lvim.builtin.which_key.mappings.s.t = { "<cmd>lua require('fzf-lua').live_grep_native()<cr>", "Text" }
+lvim.builtin.which_key.mappings.l.e = { "<cmd>lua require('lvim.lsp.handlers').show_line_diagnostics()<cr>", "Line Diagnostics"}
 lvim.builtin.which_key.mappings["gs"] = nil
 lvim.builtin.which_key.mappings["gh"] = { "<cmd>cmd>lua require('lsp_signature').toggle_float_win()<cr>", "Show/hide signature help" }
 lvim.builtin.which_key.mappings["c"] = { ":BufferClose<cr>", "Close Buffer"}
@@ -105,7 +91,8 @@ local bad_ext = {
   'pdf',
   'dylib',
   'jar',
-  'docx'
+  'docx',
+  'met'
 }
 bad_ext = [[ -E '*.]] .. table.concat(bad_ext, [[' -E '*.]]) .. [[']]
 lvim.builtin.which_key.mappings.s.f = { [[<cmd>lua require('fzf-lua').files({fd_opts = "--type f -E node_modules -E .git]] .. bad_ext .. [["})<cr>]], "Text" }
@@ -123,46 +110,11 @@ table.insert(lvim.builtin.project.patterns, 1, "package.json")
 table.remove(lvim.builtin.project.patterns)
 
 -- Telescope
-lvim.builtin.telescope.active = true
-lvim.builtin.telescope.defaults.prompt_prefix = ""
-lvim.builtin.telescope.defaults.selection_caret = " "
-lvim.builtin.telescope.defaults.path_display = { 'smart' }
-lvim.builtin.telescope.defaults.layout_config = {
-  width = 0.75,
-  -- height = 20,
-  prompt_position = "bottom",
-  preview_cutoff = 120,
-  horizontal = { mirror = false },
-  vertical = { mirror = false },
-}
-lvim.builtin.telescope.pickers = {
-  find_files = {
-    find_command = {
-      'rg',
-      '--type=all',
-      '--ignore',
-      '--files'
-    }
-  }
-}
-lvim.builtin.telescope.defaults.mappings = {
-  i = {
-    ["<Esc>"] = "close",
-    ["<C-a>"] = function()
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-o>0", true, false, true), "t", true)
-    end,
-    ["<C-e>"] = function()
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-o>$", true, false, true), "t", true)
-    end,
-    ["<C-u>"] = function()
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-o>c0", true, false, true), "t", true)
-    end,
-  }
-}
+require('user.telescope').config()
 
 -- CMP
 lvim.builtin.cmp.confirm_opts.select = false
-lvim.builtin.cmp.completion.completeopt = "menu,menuone,noselect,noinsert,preview"
+lvim.builtin.cmp.completion.completeopt = "menu,menuone,noselect,preview"
 lvim.builtin.cmp.sources = {
     { name = "nvim_lsp" },
     -- { name = "cmp_tabnine", max_item_count = 3 },
@@ -300,12 +252,6 @@ local custom_servers = { "sumneko_lua", "tsserver", "jsonls", "html", "tailwindc
 local disable_servers = { "emmet_ls" }
 vim.list_extend(lvim.lsp.override, disable_servers)
 vim.list_extend(lvim.lsp.override, custom_servers)
-for _, server_name in pairs(custom_servers) do
-  local ok, custom_config = pcall(require, "user/providers/" .. server_name)
-  if ok then
-    require("lvim.lsp.manager").setup(server_name, custom_config)
-  end
-end
 
 -- Additional Plugins
 require('user.plugins').config()
