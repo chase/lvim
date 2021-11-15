@@ -29,17 +29,17 @@ lvim.colorscheme = "everforest"
 lvim.leader = ","
 lvim.keys = {
   normal_mode = {
-      ["<C-s>"] = ":w<cr>",
-      ["<C-/>"] = "<Cmd>lua ___comment_call('gc')<CR>g@g@",
-      ["<C-p>"] = "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown({previewer = false, layout_config={width=0.8,prompt_position='top'}}))<cr>",
-      ["]e"] = "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>",
-      ["[e"] = "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>",
-      ["<F2>"] = "<cmd>lua vim.lsp.buf.rename()<cr>",
-      ["<C-`>"] = "<cmd>lua _ToggleTerm()<cr>",
-      ["<A-j>"] = false,
-      ["<A-k>"] = false,
-      ["]c"] = "<cmd>lua require'gitsigns'.next_hunk()<cr>",
-      ["[c"] = "<cmd>lua require'gitsigns'.prev_hunk()<cr>",
+    ["<C-s>"] = ":w<cr>",
+    ["<C-/>"] = "<Cmd>lua ___comment_call('gc')<CR>g@g@",
+    ["<C-p>"] = "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown({previewer = false, layout_config={width=0.8,prompt_position='top'}}))<cr>",
+    ["]e"] = "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>",
+    ["[e"] = "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>",
+    ["<F2>"] = "<cmd>lua vim.lsp.buf.rename()<cr>",
+    ["<C-`>"] = "<cmd>lua _ToggleTerm()<cr>",
+    ["<A-j>"] = false,
+    ["<A-k>"] = false,
+    ["]c"] = "<cmd>lua require'gitsigns'.next_hunk()<cr>",
+    ["[c"] = "<cmd>lua require'gitsigns'.prev_hunk()<cr>",
   },
   visual_mode = {
     ["<C-/>"] = "<esc><cmd>lua ___comment_gc(vim.fn.visualmode())<CR>",
@@ -72,7 +72,6 @@ lvim.builtin.which_key.mappings["r"] = { "<cmd>lua require('fzf-lua').oldfiles({
 lvim.builtin.which_key.mappings.j = lvim.builtin.which_key.mappings.b.j
 lvim.builtin.which_key.mappings.s.t = { "<cmd>lua require('fzf-lua').live_grep_native()<cr>", "Text" }
 lvim.builtin.which_key.mappings.l.e = { "<cmd>lua require('lvim.lsp.handlers').show_line_diagnostics()<cr>", "Line Diagnostics"}
-lvim.builtin.which_key.mappings["gs"] = nil
 lvim.builtin.which_key.mappings["gh"] = { "<cmd>cmd>lua require('lsp_signature').toggle_float_win()<cr>", "Show/hide signature help" }
 lvim.builtin.which_key.mappings["c"] = { ":BufferClose<cr>", "Close Buffer"}
 lvim.builtin.which_key.mappings["q"] = { ":q<cr>", "Quit"}
@@ -104,10 +103,6 @@ lvim.builtin.autopairs.active = false
 
 -- project.nvim
 lvim.builtin.project.active = true
--- package.json is more important than .git in a monorepo
-lvim.builtin.project.detection_methods = { "pattern", "lsp" }
-table.insert(lvim.builtin.project.patterns, 1, "package.json")
-table.remove(lvim.builtin.project.patterns)
 
 -- Telescope
 require('user.telescope').config()
