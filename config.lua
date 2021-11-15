@@ -256,3 +256,19 @@ require('user.plugins').config()
 -- lvim.autocommands.custom_groups = {
 --   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
 -- }
+
+local nls_ok, nls = pcall(require, "null-ls")
+if nls_ok then
+  nls.config {
+    -- debug = true,
+    debounce = 150,
+    save_after_format = false,
+    sources = {
+      nls.builtins.formatting.prettierd,
+      nls.builtins.formatting.stylua,
+      nls.builtins.formatting.shfmt.with { extra_args = { "-i", "2", "-ci" } },
+      nls.builtins.diagnostics.eslint_d,
+      nls.builtins.diagnostics.vint,
+    }
+  }
+end
