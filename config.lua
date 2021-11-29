@@ -21,6 +21,7 @@ vim.opt.fillchars = "vert:▕"
 vim.opt.cmdheight = 1
 vim.opt.confirm = true
 vim.opt.mouse = "nicr"
+vim.opt.autoread = true
 lvim.format_on_save = false
 lvim.lint_on_save = true
 lvim.colorscheme = "everforest"
@@ -30,7 +31,7 @@ lvim.leader = ","
 lvim.keys = {
   normal_mode = {
     ["<C-s>"] = ":w<cr>",
-    ["<C-/>"] = "<Cmd>lua ___comment_call('gc')<CR>g@g@",
+    ["<C-/>"] = "<Cmd>lua require('Comment.api').call('gc')<CR>g@g@",
     ["<C-p>"] = "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown({previewer = false, layout_config={width=0.8,prompt_position='top'}}))<cr>",
     ["]e"] = "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>",
     ["[e"] = "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>",
@@ -42,7 +43,7 @@ lvim.keys = {
     ["[c"] = "<cmd>lua require'gitsigns'.prev_hunk()<cr>",
   },
   visual_mode = {
-    ["<C-/>"] = "<esc><cmd>lua ___comment_gc(vim.fn.visualmode())<CR>",
+    ["<C-/>"] = "<esc><cmd>lua require('Comment.api').call(vim.fn.visualmode())<CR>",
     ["<A-j>"] = false,
     ["<A-k>"] = false,
   },
@@ -91,7 +92,8 @@ local bad_ext = {
   'dylib',
   'jar',
   'docx',
-  'met'
+  'met',
+  'lock'
 }
 bad_ext = [[ -E '*.]] .. table.concat(bad_ext, [[' -E '*.]]) .. [[']]
 lvim.builtin.which_key.mappings.s.f = { [[<cmd>lua require('fzf-lua').files({fd_opts = "--type f -E node_modules -E .git]] .. bad_ext .. [["})<cr>]], "Text" }
@@ -116,7 +118,7 @@ lvim.builtin.cmp.sources = {
   -- { name = "cmp_tabnine", max_item_count = 3 },
   { name = "path", max_item_count = 5 },
   { name = "luasnip", max_item_count = 3 },
-  -- { name = "buffer", max_item_count = 5, keyword_length = 5 },
+  { name = "buffer", max_item_count = 5, keyword_length = 5 },
   { name = "nvim_lua" },
   -- { name = "calc" },
   -- { name = "emoji" },
@@ -187,7 +189,9 @@ lvim.builtin.nvimtree.icons.folder.open = ""
 lvim.builtin.nvimtree.icons.folder.empty = ""
 lvim.builtin.nvimtree.icons.folder.empty_open = ""
 lvim.builtin.nvimtree.show_icons.folder_arrows = 0
-lvim.builtin.nvimtree.hide_dotfiles = false
+lvim.builtin.nvimtree.filters = {
+  dotfiles = true
+}
 
 -- TreeSitter
 lvim.builtin.treesitter.ensure_installed = "maintained"
@@ -244,30 +248,29 @@ lvim.lsp.diagnostics.virtual_text = false
 lvim.lsp.document_highlight = true
 lvim.lsp.code_lens_refresh = true
 lvim.lsp.automatic_servers_installation = false
-local custom_servers = { "sumneko_lua", "tsserver", "jsonls", "html", "tailwindcss" }
-local disable_servers = { "emmet_ls" }
+local disable_servers = { "emmet_ls", "tailwindcss" }
 vim.list_extend(lvim.lsp.override, disable_servers)
-vim.list_extend(lvim.lsp.override, custom_servers)
 
 -- Additional Plugins
 require('user.plugins').config()
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
--- lvim.autocommands.custom_groups = {
---   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
--- }
+lvim.autocommands.custom_groups = {
+  -- treesitter doesn't actually respect per-file disable
+  { "BufEnter", "*.ts,*.tsx", "lua local disable=require'nvim-treesitter.configs'.commands.TSBufDisable.run disable('indent')" },
+}
 
 local nls_ok, nls = pcall(require, "null-ls")
 if nls_ok then
   nls.config {
-    -- debug = true,
     debounce = 150,
     save_after_format = false,
     sources = {
-      nls.builtins.formatting.prettierd,
       nls.builtins.formatting.stylua,
       nls.builtins.formatting.shfmt.with { extra_args = { "-i", "2", "-ci" } },
       nls.builtins.diagnostics.eslint_d,
+      nls.builtins.code_actions.eslint_d,
+      nls.builtins.formatting.prettierd,
       nls.builtins.diagnostics.vint,
     }
   }

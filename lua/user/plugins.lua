@@ -56,18 +56,18 @@ M.config = function ()
         require "lsp_signature".setup(cfg)
       end
     },
-    {
-      "folke/trouble.nvim",
-      event = "BufRead",
-      requires = "kyazdani42/nvim-web-devicons",
-      config = function()
-        require("trouble").setup {
-          -- your configuration comes here
-          -- or leave it empty to use the default settings
-          -- refer to the configuration section below
-        }
-      end
-    },
+    -- {
+    --   "folke/trouble.nvim",
+    --   event = "BufRead",
+    --   requires = "kyazdani42/nvim-web-devicons",
+    --   config = function()
+    --     require("trouble").setup {
+    --       -- your configuration comes here
+    --       -- or leave it empty to use the default settings
+    --       -- refer to the configuration section below
+    --     }
+    --   end
+    -- },
     {
       "folke/lua-dev.nvim",
       before = "williamboman/nvim-lsp-installer",
@@ -138,11 +138,6 @@ M.config = function ()
     end
   },
   {
-    "rcarriga/vim-ultest",
-    requires = {"vim-test/vim-test"},
-    run = ":UpdateRemotePlugins"
-  },
-  {
     "simrat39/symbols-outline.nvim"
   },
   {
@@ -161,6 +156,7 @@ M.config = function ()
       }
     end,
   },
+  {'kevinhwang91/nvim-bqf', ft = 'qf'}
 }
 end
 
