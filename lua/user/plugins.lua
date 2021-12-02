@@ -31,7 +31,7 @@ M.config = function ()
       config = function()
         local cfg = {
           bind = true,
-          doc_lines = 5,
+          doc_lines = 0,
           floating_window = true, -- show hint in a floating window, set to false for virtual text only mode
           floating_window_above_cur_line = true,
           fix_pos = false, -- set to true, the floating window will not auto-close until finish all parameters
@@ -40,9 +40,9 @@ M.config = function ()
           hint_scheme = "String",
           -- use_lspsaga = false, -- set to true if you want to use lspsaga popup
           hi_parameter = "Search", -- how your parameter will be highlight
-          max_height = 8, -- max height of signature floating_window, if content is more than max_height, you can scroll down
+          max_height = 5, -- max height of signature floating_window, if content is more than max_height, you can scroll down
           -- to view the hiding contents
-          max_width = 120, -- max_width of signature floating_window, line will be wrapped if exceed max_width
+          max_width = 80, -- max_width of signature floating_window, line will be wrapped if exceed max_width
           handler_opts = {
             border = "rounded",   -- double, single, shadow, none
           },
