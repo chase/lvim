@@ -68,11 +68,11 @@ M.config = function ()
     --     }
     --   end
     -- },
-    {
-      "folke/lua-dev.nvim",
-      before = "williamboman/nvim-lsp-installer",
-      ft = "lua"
-    },
+    -- {
+    --   "folke/lua-dev.nvim",
+    --   before = "williamboman/nvim-lsp-installer",
+    --   ft = "lua"
+    -- },
     {
       "jose-elias-alvarez/nvim-lsp-ts-utils",
       ft = {"typescript", "typescriptreact"}
@@ -156,7 +156,15 @@ M.config = function ()
       }
     end,
   },
-  {'kevinhwang91/nvim-bqf', ft = 'qf'}
+  {'kevinhwang91/nvim-bqf', ft = 'qf'},
+  {
+    'jvgrootveld/telescope-zoxide',
+    config = function ()
+      -- require("telescope._extensions.zoxide.config").setup({
+      --   prompt_title 
+      -- })
+    end
+  }
 }
 end
 
