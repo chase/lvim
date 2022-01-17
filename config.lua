@@ -130,6 +130,10 @@ lvim.builtin.nvimtree.setup.update_to_buf_dir = {
 -- TreeSitter
 lvim.builtin.treesitter.ensure_installed = "maintained"
 lvim.builtin.treesitter.ignore_install = { "haskell" }
+lvim.builtin.treesitter.highlight.custom_captures = {
+  ["typescript.param.impl"] = "typescriptParamImpl",
+  ["typescript.object.label"] = "typescriptObjectLabel"
+}
 lvim.builtin.treesitter.highlight.additional_vim_regex_highlighting = true
 lvim.builtin.treesitter.highlight.disable = {
 	"typescript",
