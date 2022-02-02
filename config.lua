@@ -227,4 +227,12 @@ lvim.autocommands.custom_groups = {
 	{ "BufWritePost", require("lvim.bootstrap").config_dir .. "/user/*.lua", "lua require('lvim.config'):reload()" },
 }
 
+-- Omnisharp fix
+require('lvim.lsp.manager').setup("omnisharp", {
+  root_dir = function(fname)
+    local util = require('lspconfig.util')
+    return util.root_pattern '*.csproj'(fname) or util.root_pattern '*.sln'(fname)
+  end,
+})
+
 require("user.null_lsp")
