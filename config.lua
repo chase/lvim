@@ -203,8 +203,13 @@ lvim.lsp.diagnostics.virtual_text = false
 lvim.lsp.document_highlight = true
 lvim.lsp.code_lens_refresh = false
 lvim.lsp.automatic_servers_installation = false
-local disable_servers = { "emmet_ls", "tailwindcss" }
+local disable_servers = { "emmet_ls" }
 vim.list_extend(lvim.lsp.override, disable_servers)
+for i, server in ipairs(lvim.lsp.override) do
+  if server == "tailwindcss" then
+    table.remove(lvim.lsp.override, i)
+  end
+end
 
 -- Additional Plugins
 lvim.plugins = require("user.plugins")
