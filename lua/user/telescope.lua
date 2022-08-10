@@ -90,13 +90,6 @@ function M.config()
   }
 end
 
-function M.lsp_code_actions()
-  local opts = {
-    shorten_path = false
-  }
-  builtin.lsp_code_actions(themes.get_cursor(opts))
-end
-
 function M.find_files()
   local opts = {
     previewer = false,

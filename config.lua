@@ -1,13 +1,13 @@
 -- reload user modules on save
 local reload_hook = require("lvim.config").reload
 require("lvim.config").reload = function(self)
-	reload_hook(self)
-
 	for module, _ in pairs(package.loaded) do
 		if module:match("^user%.") then
 			package.loaded[module] = nil
 		end
 	end
+
+	reload_hook(self)
 end
 
 -- everforest
@@ -37,9 +37,6 @@ vim.g.rnvimr_layout = {
 -- filetype.nvim
 vim.g.did_load_filetypes = 1
 
--- nvim_tree old settings
-vim.g.nvim_tree_respect_buf_cwd = 1
-
 -- general
 vim.opt.timeoutlen = 200
 vim.opt.clipboard = "unnamed"
@@ -58,7 +55,6 @@ require("user.keymap")
 lvim.builtin.notify.active = true
 
 -- Autopairs
-lvim.builtin.autopairs.active = false
 
 -- project.nvim
 lvim.builtin.project.active = true
@@ -86,7 +82,7 @@ lvim.builtin.cmp.sources = {
 }
 
 -- Dashboard (or not)
-lvim.builtin.dashboard.active = false
+lvim.builtin.alpha.active = false
 
 -- Terminal
 lvim.builtin.terminal.active = true
@@ -99,22 +95,23 @@ lvim.builtin.terminal.on_config_done = function()
 end
 
 -- barbar
-lvim.builtin.bufferline.on_config_done = function()
-	vim.g.bufferline.exclude_ft = { "dashboard", "alpha" }
-end
+-- lvim.builtin.bufferline.on_config_done = function()
+-- 	vim.g.bufferline.exclude_ft = { "dashboard", "alpha" }
+-- end
+lvim.builtin.bufferline.options.always_show_bufferline = true
 
 -- nvimtree
-lvim.builtin.nvimtree.side = "left"
-lvim.builtin.nvimtree.show_icons.git = 1
-lvim.builtin.nvimtree.icons.folder.default = ""
-lvim.builtin.nvimtree.icons.folder.open = ""
-lvim.builtin.nvimtree.icons.folder.empty = ""
-lvim.builtin.nvimtree.icons.folder.empty_open = ""
-lvim.builtin.nvimtree.show_icons.folder_arrows = 0
+-- lvim.builtin.nvimtree.side = "left"
+lvim.builtin.nvimtree.setup.renderer.icons.show.folder_arrow = false
+lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.default = ""
+lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.open = ""
+lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.empty = ""
+lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.empty_open = ""
 lvim.builtin.nvimtree.setup.update_cwd = true
 lvim.builtin.nvimtree.setup.hijack_netrw = false
 lvim.builtin.nvimtree.setup.disable_netrw = false
-lvim.builtin.nvimtree.setup.open_on_startup = false
+lvim.builtin.nvimtree.setup.git.ignore = true
+-- lvim.builtin.nvimtree.setup.open_on_startup = false
 lvim.builtin.nvimtree.setup.update_focused_file = {
 	enable = true,
 	update_cwd = false,
@@ -122,17 +119,12 @@ lvim.builtin.nvimtree.setup.update_focused_file = {
 lvim.builtin.nvimtree.setup.filters = {
 	dotfiles = true,
 }
-lvim.builtin.nvimtree.setup.update_to_buf_dir = {
-	enable = true,
-	auto_open = false,
-}
 
 -- TreeSitter
-lvim.builtin.treesitter.ensure_installed = "maintained"
 lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.custom_captures = {
-  ["typescript.param.impl"] = "typescriptParamImpl",
-  ["typescript.object.label"] = "typescriptObjectLabel"
+	["typescript.param.impl"] = "typescriptParamImpl",
+	["typescript.object.label"] = "typescriptObjectLabel",
 }
 lvim.builtin.treesitter.highlight.additional_vim_regex_highlighting = true
 lvim.builtin.treesitter.highlight.disable = {
@@ -203,23 +195,17 @@ lvim.lsp.diagnostics.virtual_text = false
 lvim.lsp.document_highlight = true
 lvim.lsp.code_lens_refresh = false
 lvim.lsp.automatic_servers_installation = false
-local disable_servers = { "emmet_ls" }
-vim.list_extend(lvim.lsp.override, disable_servers)
-for i, server in ipairs(lvim.lsp.override) do
-  if server == "tailwindcss" then
-    table.remove(lvim.lsp.override, i)
-  end
-end
+lvim.lsp.automatic_configuration.skipped_servers = { "tailwindcss", "emmet_ls" }
 
 -- Additional Plugins
 lvim.plugins = require("user.plugins")
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
-lvim.autocommands.custom_groups = {
+local autocmds = {
 	-- treesitter doesn't actually respect per-file disable
 	{
 		"BufEnter",
-		"*.ts,*.tsx",
+		{ "*.ts", "*.tsx" },
 		"lua local disable=require'nvim-treesitter.configs'.commands.TSBufDisable.run disable('indent')",
 	},
 	-- don't autocomplete inside of Telescope prompts
@@ -229,15 +215,21 @@ lvim.autocommands.custom_groups = {
 	-- Resize popup terminal when vim resizes
 	{ "VimResized", "*", "lua require('user.terminal').resize()" },
 	-- Reload user config when user sub-dirs are modified
-	{ "BufWritePost", require("lvim.bootstrap").config_dir .. "/user/*.lua", "lua require('lvim.config'):reload()" },
+	{ "BufWritePost", require("lvim.bootstrap").config_dir .. "/lua/user/*.lua", "lua require('lvim.config'):reload()" },
 }
+for _, value in pairs(autocmds) do
+	vim.api.nvim_create_autocmd(value[1], {
+		pattern = value[2],
+		command = value[3],
+	})
+end
 
 -- Omnisharp fix
-require('lvim.lsp.manager').setup("omnisharp", {
-  root_dir = function(fname)
-    local util = require('lspconfig.util')
-    return util.root_pattern '*.csproj'(fname) or util.root_pattern '*.sln'(fname)
-  end,
+require("lvim.lsp.manager").setup("omnisharp", {
+	root_dir = function(fname)
+		local util = require("lspconfig.util")
+		return util.root_pattern("*.csproj")(fname) or util.root_pattern("*.sln")(fname)
+	end,
 })
 
 require("user.null_lsp")

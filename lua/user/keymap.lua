@@ -41,7 +41,7 @@ lvim.builtin.which_key.mappings["z"] = { "<cmd>lua require('user.zoxide').list()
 lvim.builtin.which_key.mappings["Z"] = { "<cmd>lua require('user.zoxide').list(true)<cr>", "Zoxide (Open Ranger)" }
 lvim.builtin.which_key.mappings["v"] = { ":vsplit<cr>", "vsplit" }
 lvim.builtin.which_key.mappings["f"] = { "<cmd>RnvimrToggle<cr>", "Explore Files" }
-lvim.builtin.which_key.mappings["a"] = { "<cmd>lua require('user.telescope').lsp_code_actions()<cr>", "Code Actions" }
+lvim.builtin.which_key.mappings["a"] = lvim.builtin.which_key.mappings.l.a
 lvim.builtin.which_key.mappings.g.g = { "<cmd>lua require('user.terminal').toggle_gitui()<cr>", "GitUI" }
 lvim.builtin.which_key.mappings["r"] = { "<cmd>lua require('fzf-lua').oldfiles({cwd_only=true})<CR>", "Recent Files" }
 lvim.builtin.which_key.mappings.j = lvim.builtin.which_key.mappings.b.j
@@ -57,6 +57,12 @@ lvim.builtin.which_key.mappings["gh"] = {
 lvim.builtin.which_key.mappings["c"] = { ":BufferClose<cr>", "Close Buffer" }
 lvim.builtin.which_key.mappings["q"] = { ":q<cr>", "Quit" }
 lvim.builtin.which_key.mappings["o"] = { ":SymbolsOutline<cr>", "Symbols Outline" }
+lvim.builtin.which_key.mappings.t = {
+  name = "TypeScript",
+	o = { ":TSLspOrganize<cr>", "Organize Imports" },
+	i = { ":TSLspImportAll<cr>", "Import All" },
+	r = { ":TSLspRenameFile<cr>", "Rename File" },
+}
 -- Exclude bad extensions from being listed in fzf-lua for files
 local bad_ext = {
 	"svg",
@@ -80,4 +86,3 @@ lvim.builtin.which_key.mappings.s.f = {
 	[[<cmd>lua require('fzf-lua').files({fd_opts = "--type f -E node_modules -E .git]] .. bad_ext .. [["})<cr>]],
 	"Text",
 }
-
