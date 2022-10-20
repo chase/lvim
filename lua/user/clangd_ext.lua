@@ -9,7 +9,7 @@ M.config = function()
 		"--background-index",
 		"-j=16",
 		"--all-scopes-completion",
-		"--pch-storage=file",
+		"--pch-storage=disk",
 		"--clang-tidy",
 		"--log=error",
 		"--completion-style=detailed",
