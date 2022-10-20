@@ -10,12 +10,16 @@ M.config = function()
 						telescope = require("telescope.themes").get_cursor(),
 					}
 				end
-				-- NvimTree bugs out when trying to rename files without this
-				if vim.api.nvim_buf_get_option(0, "filetype") == "NvimTree" then
-					return { enabled = false }
-				end
 			end,
 		},
+    input = {
+      get_config = function()
+				-- NvimTree bugs out when trying to rename files without this
+				if vim.o.filetype == "NvimTree" then
+					return { enabled = false }
+				end
+      end
+    }
 	})
 end
 
