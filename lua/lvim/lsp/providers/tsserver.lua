@@ -13,10 +13,6 @@ local opts = {
 			enable_import_on_completion = true,
 			import_all_timeout = 1000, -- ms
 
-			-- parentheses completion
-			complete_parens = true,
-			signature_help_in_parens = false,
-
 			auto_inlay_hints = false,
 			inlay_hints_highlight = "Comment",
 

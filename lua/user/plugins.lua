@@ -1,10 +1,9 @@
 return {
 	{ "~/OSS/everforest" },
 	{
-		"machakann/vim-sandwich",
-		event = "BufRead",
+		"kylechui/nvim-surround",
 		config = function()
-			vim.cmd([[runtime macros/sandwich/keymap/surround.vim]])
+			require("nvim-surround").setup()
 		end,
 	},
 	{ "knubie/vim-kitty-navigator" },
@@ -27,7 +26,8 @@ return {
 		"kosayoda/nvim-lightbulb",
 		event = "BufRead",
 		config = function()
-			vim.fn.sign_define("LightBulbSign", { text = " ", texthl = "YellowSign" })
+			---@diagnostic disable-next-line: param-type-mismatch, redundant-parameter
+			vim.fn.sign_define("LightBulbSign", { text = "", texthl = "YellowSign" })
 			vim.cmd([[
       autocmd CursorHold,CursorHoldI * lua if #vim.lsp.buf_get_clients() > 1 then require'nvim-lightbulb'.update_lightbulb() end
       ]])
@@ -60,6 +60,10 @@ return {
 				log_path = "debug_log_file_path", -- debug log path
 				padding = "", -- character to pad on left and right of signature can be ' ', or '|'  etc
 				timer_interval = 100,
+        close_timeout = 1000,
+        shadow_blend = 36,
+        shadow_guibg = '#2b3339',
+        transparency = 15,
 			}
 			require("lsp_signature").setup(cfg)
 		end,
@@ -146,9 +150,6 @@ return {
 			})
 		end,
 	},
-	{
-		"simrat39/symbols-outline.nvim",
-	},
 	-- {
 	-- 	"b0o/schemastore.nvim",
 	-- },
@@ -165,23 +166,12 @@ return {
 			})
 		end,
 	},
-	{ "kevinhwang91/nvim-bqf", ft = "qf" },
+	-- { "kevinhwang91/nvim-bqf", ft = "qf" },
 	{
 		"stevearc/dressing.nvim",
-		-- requires = { "nvim-telescope/telescope.nvim" },
+		requires = { "nvim-telescope/telescope.nvim" },
 		config = function()
-			require("dressing").setup({
-				select = {
-					get_config = function(opts)
-						if opts.kind == "codeaction" then
-							return {
-								backend = "telescope",
-                telescope = require('telescope.themes').get_cursor()
-							}
-						end
-					end,
-				},
-			})
+			require("user.dressing").config()
 		end,
 	},
 	{
@@ -192,4 +182,18 @@ return {
 			-- })
 		end,
 	},
+	{ "jvirtanen/vim-hcl" },
+	{ "nvim-treesitter/playground" },
+	{
+		requires = { "nvim-treesitter/nvim-treesitter" },
+		"Badhi/nvim-treesitter-cpp-tools",
+	},
+	{
+		"p00f/clangd_extensions.nvim",
+		ft = { "c", "cpp", "objc", "objcpp" },
+		config = function()
+			require("user.clangd_ext").config()
+		end,
+	},
+  {'folke/zen-mode.nvim'}
 }

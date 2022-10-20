@@ -2,7 +2,7 @@
 local reload_hook = require("lvim.config").reload
 require("lvim.config").reload = function(self)
 	for module, _ in pairs(package.loaded) do
-		if module:match("^user%.") then
+		if module:match("^user%.") or module:match("^icons.lua") then
 			package.loaded[module] = nil
 		end
 	end
@@ -12,10 +12,12 @@ end
 
 -- everforest
 vim.g.everforest_background = "medium"
+vim.g.everforest_sign_column_background = "grey"
 vim.g.everforest_enable_italic = 0
 vim.g.everforest_disable_italic_comment = 1
 vim.g.everforest_diagnostic_virtual_text = "colored"
 vim.g.everforest_show_eob = 0
+vim.g.everforest_ui_contrast = "low"
 vim.g.everforest_better_performance = 1
 
 -- ranger
@@ -34,17 +36,42 @@ vim.g.rnvimr_layout = {
 	border = "single",
 }
 
+local disabled_plugins = {
+	"2html_plugin",
+	"getscript",
+	"getscriptPlugin",
+	"gzip",
+	"logipat",
+	"netrw",
+	"netrwPlugin",
+	"netrwSettings",
+	"netrwFileHandlers",
+	"matchit",
+	"tar",
+	"tarPlugin",
+	"rrhelper",
+	"spellfile_plugin",
+	"vimball",
+	"vimballPlugin",
+	"zip",
+	"zipPlugin",
+}
+for _, plugin in pairs(disabled_plugins) do
+	vim.g["loaded_" .. plugin] = 1
+end
+
 -- filetype.nvim
 vim.g.did_load_filetypes = 1
 
 -- general
 vim.opt.timeoutlen = 200
 vim.opt.clipboard = "unnamed"
-vim.opt.fillchars = "vert:▕"
+vim.opt.fillchars = "vert:▕,verthoriz:🮀,horiz:🮀,horizdown:🮀,horizup:🮀,vertleft:▕,vertright:▕"
 vim.opt.cmdheight = 1
 vim.opt.confirm = true
 vim.opt.mouse = "nicr"
 vim.opt.autoread = true
+vim.opt.pumblend = 10
 lvim.format_on_save = false
 lvim.lint_on_save = true
 lvim.colorscheme = "everforest"
@@ -59,15 +86,17 @@ lvim.builtin.notify.active = true
 -- project.nvim
 lvim.builtin.project.active = true
 lvim.builtin.project.detection_methods = { "pattern", "lsp" }
-lvim.builtin.project.patterns = { "*.csproj", "*.sln", "package.json", "Makefile", ".git" }
+lvim.builtin.project.patterns = { "compile_commands.json", "*.csproj", "*.sln", "package.json", "Makefile", ".git" }
 
 -- Telescope
 require("user.telescope").config()
 
 -- CMP
+local cmp = require("cmp")
 lvim.builtin.cmp.confirm_opts.select = false
+-- lvim.builtin.cmp.window.documentation
 lvim.builtin.cmp.completion.completeopt = "menu,menuone,noselect,preview"
-lvim.builtin.cmp.preselect = require("cmp").PreselectMode.None
+lvim.builtin.cmp.preselect = cmp.PreselectMode.None
 lvim.builtin.cmp.sources = {
 	{ name = "nvim_lsp" },
 	-- { name = "cmp_tabnine", max_item_count = 3 },
@@ -80,6 +109,23 @@ lvim.builtin.cmp.sources = {
 	-- { name = "treesitter" },
 	{ name = "crates" },
 }
+lvim.builtin.cmp.sorting = {
+	comparators = {
+		cmp.config.compare.offset,
+		cmp.config.compare.exact,
+		-- cmp.config.compare.scopes,
+		cmp.config.compare.score,
+		cmp.config.compare.recently_used,
+		cmp.config.compare.locality,
+		cmp.config.compare.kind,
+		cmp.config.compare.sort_text,
+		cmp.config.compare.length,
+		cmp.config.compare.order,
+	},
+}
+if vim.tbl_contains({ "cpp", "c", "objcpp", "objc" }, vim.bo.filetype) then
+	table.insert(lvim.builtin.cmp.sorting.comparators, 2, require("clangd_extensions.cmp_scores"))
+end
 
 -- Dashboard (or not)
 lvim.builtin.alpha.active = false
@@ -94,11 +140,73 @@ lvim.builtin.terminal.on_config_done = function()
 	package.loaded["user.terminal"] = nil
 end
 
--- barbar
--- lvim.builtin.bufferline.on_config_done = function()
--- 	vim.g.bufferline.exclude_ft = { "dashboard", "alpha" }
--- end
+-- bufferline
 lvim.builtin.bufferline.options.always_show_bufferline = true
+local no_italics = {
+	"background",
+	"buffer_selected",
+	"numbers_selected",
+	"error_selected",
+	"error_selected",
+	"error_diagnostic_selected",
+	"duplicate_selected",
+	"duplicate",
+	"duplicate_visible",
+	"diagnostic_selected",
+	"hint_selected",
+	"hint_diagnostic_selected",
+	"info_selected",
+	"info_diagnostic_selected",
+	"warning_selected",
+	"warning_diagnostic_selected",
+	"pick_selected",
+	"pick_visible",
+	"pick",
+}
+for _, hl in ipairs(no_italics) do
+	lvim.builtin.bufferline.highlights[hl] = { italic = false }
+end
+lvim.builtin.bufferline.options.show_tab_indicators = false
+
+local icons = lvim.icons.kind
+lvim.builtin.breadcrumbs.active = true
+lvim.builtin.breadcrumbs.options.separator = "  "
+lvim.builtin.breadcrumbs.options.icons = {
+	Array = icons.Array .. " ",
+	-- Boolean = icons.Boolean .. " ",
+	Class = icons.Class .. " ",
+	Color = icons.Color .. " ",
+	Constant = icons.Constant .. " ",
+	Constructor = icons.Constructor .. " ",
+	Enum = icons.Enum .. " ",
+	EnumMember = icons.EnumMember .. " ",
+	Event = icons.Event .. " ",
+	Field = icons.Field .. " ",
+	File = icons.File .. " ",
+	Folder = icons.Folder .. " ",
+	Function = icons.Function .. " ",
+	Interface = icons.Interface .. " ",
+	Key = icons.Key .. " ",
+	Keyword = icons.Keyword .. " ",
+	Method = icons.Method .. " ",
+	Module = icons.Module .. " ",
+	Namespace = icons.Namespace .. " ",
+	Null = icons.Null .. " ",
+	Number = icons.Number .. " ",
+	Object = icons.Object .. " ",
+	Operator = icons.Operator .. " ",
+	Package = icons.Package .. " ",
+	Property = icons.Property .. " ",
+	Reference = icons.Reference .. " ",
+	Snippet = icons.Snippet .. " ",
+	String = icons.String .. " ",
+	Struct = icons.Struct .. " ",
+	Text = icons.Text .. " ",
+	TypeParameter = icons.TypeParameter .. " ",
+	-- Unit = icons.Unit .. " ",
+	-- Value = icons.Value .. " ",
+	Variable = icons.Variable .. " ",
+}
 
 -- nvimtree
 -- lvim.builtin.nvimtree.side = "left"
@@ -107,25 +215,22 @@ lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.default = ""
 lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.open = ""
 lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.empty = ""
 lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.empty_open = ""
-lvim.builtin.nvimtree.setup.update_cwd = true
+lvim.builtin.nvimtree.setup.sync_root_with_cwd = true
 lvim.builtin.nvimtree.setup.hijack_netrw = false
 lvim.builtin.nvimtree.setup.disable_netrw = false
 lvim.builtin.nvimtree.setup.git.ignore = true
 -- lvim.builtin.nvimtree.setup.open_on_startup = false
 lvim.builtin.nvimtree.setup.update_focused_file = {
 	enable = true,
-	update_cwd = false,
+	update_root = false,
 }
 lvim.builtin.nvimtree.setup.filters = {
 	dotfiles = true,
+	exclude = { ".gitignore", ".github", ".env" },
 }
 
 -- TreeSitter
 lvim.builtin.treesitter.ignore_install = { "haskell" }
-lvim.builtin.treesitter.highlight.custom_captures = {
-	["typescript.param.impl"] = "typescriptParamImpl",
-	["typescript.object.label"] = "typescriptObjectLabel",
-}
 lvim.builtin.treesitter.highlight.additional_vim_regex_highlighting = true
 lvim.builtin.treesitter.highlight.disable = {
 	"typescript",
@@ -141,17 +246,23 @@ lvim.builtin.treesitter.indent.disable = {
 	"yaml",
 	"javascript",
 	"lua",
-	"cpp",
 	"typescript",
 	"javascriptreact",
 	"typescriptreact",
 }
+
+-- indent-blankline
+-- only show active line
+vim.g.indent_blankline_char = " "
 
 -- lualine
 lvim.builtin.lualine.options.disabled_filetypes = { "toggleterm", "dashboard", "terminal" }
 lvim.builtin.lualine.options.theme = "everforest"
 local conditions = require("lvim.core.lualine.conditions")
 local components = require("lvim.core.lualine.components")
+components.mode[1] = function()
+	return " "
+end
 lvim.builtin.lualine.sections.lualine_z = {
 	{
 		function()
@@ -168,6 +279,12 @@ lvim.builtin.lualine.sections.lualine_z = {
 	},
 }
 lvim.builtin.lualine.inactive_sections.lualine_a = {
+	{
+		"filename",
+		path = 1,
+	},
+}
+lvim.builtin.lualine.sections.lualine_c = {
 	{
 		"filename",
 		path = 1,
@@ -195,7 +312,10 @@ lvim.lsp.diagnostics.virtual_text = false
 lvim.lsp.document_highlight = true
 lvim.lsp.code_lens_refresh = false
 lvim.lsp.automatic_servers_installation = false
-lvim.lsp.automatic_configuration.skipped_servers = { "tailwindcss", "emmet_ls" }
+lvim.lsp.automatic_configuration.skipped_servers = vim.list_extend(
+	lvim.lsp.automatic_configuration.skipped_servers,
+	{ "tailwindcss", "emmet_ls", "angular-language-server", "clangd", "pyright", "omnisharp" }
+)
 
 -- Additional Plugins
 lvim.plugins = require("user.plugins")
@@ -206,21 +326,49 @@ local autocmds = {
 	{
 		"BufEnter",
 		{ "*.ts", "*.tsx" },
-		"lua local disable=require'nvim-treesitter.configs'.commands.TSBufDisable.run disable('indent')",
+		function()
+			local disable = require("nvim-treesitter.configs").commands.TSBufDisable.run
+			disable("indent")
+		end,
 	},
 	-- don't autocomplete inside of Telescope prompts
-	{ "FileType", "TelescopePrompt", "lua require('cmp').setup.buffer { sources = {} }" },
+	{
+		"FileType",
+		"TelescopePrompt",
+		function()
+			require("cmp").setup.buffer({ sources = {} })
+		end,
+	},
 	-- C# has 4-space based indent, not 2
-	{ "FileType", "cs", "setl ts=4 sts=4 sw=4" },
+	{
+		"FileType",
+		"cs",
+		function()
+			vim.cmd("setl ts=4 sts=4 sw=4")
+		end,
+	},
 	-- Resize popup terminal when vim resizes
-	{ "VimResized", "*", "lua require('user.terminal').resize()" },
+	{ "VimResized", "*", require("user.terminal").resize },
 	-- Reload user config when user sub-dirs are modified
-	{ "BufWritePost", require("lvim.bootstrap").config_dir .. "/lua/user/*.lua", "lua require('lvim.config'):reload()" },
+	{
+		"BufWritePost",
+		require("lvim.bootstrap").config_dir .. "/lua/user/*.lua",
+		function()
+			require("lvim.config"):reload()
+		end,
+	},
+	{
+		"FileType",
+		{ "cpp", "c", "objc", "objcpp" },
+		function()
+			vim.cmd("nmap <M-o> <cmd>ClangdSwitchSourceHeader<cr>")
+		end,
+	},
 }
 for _, value in pairs(autocmds) do
 	vim.api.nvim_create_autocmd(value[1], {
 		pattern = value[2],
-		command = value[3],
+		callback = value[3],
 	})
 end
 
@@ -228,7 +376,7 @@ end
 require("lvim.lsp.manager").setup("omnisharp", {
 	root_dir = function(fname)
 		local util = require("lspconfig.util")
-		return util.root_pattern("*.csproj")(fname) or util.root_pattern("*.sln")(fname)
+		return util.root_pattern("*.csproj", "*.sln")(fname)
 	end,
 })
 

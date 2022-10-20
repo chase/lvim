@@ -1,3 +1,4 @@
+---@diagnostic disable: redundant-parameter
 local nls_ok, nls = pcall(require, "null-ls")
 if nls_ok then
 	nls.setup({
