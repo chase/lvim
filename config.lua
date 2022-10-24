@@ -60,9 +60,6 @@ for _, plugin in pairs(disabled_plugins) do
 	vim.g["loaded_" .. plugin] = 1
 end
 
--- filetype.nvim
-vim.g.did_load_filetypes = 1
-
 -- general
 vim.opt.timeoutlen = 200
 vim.opt.clipboard = "unnamed"

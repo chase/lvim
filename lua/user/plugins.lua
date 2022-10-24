@@ -150,22 +150,6 @@ return {
 			})
 		end,
 	},
-	-- {
-	-- 	"b0o/schemastore.nvim",
-	-- },
-	{
-		"nathom/filetype.nvim",
-		config = function()
-			require("filetype").setup({
-				overrides = {
-					literal = {
-						["kitty.conf"] = "kitty",
-						[".gitignore"] = "conf",
-					},
-				},
-			})
-		end,
-	},
 	-- { "kevinhwang91/nvim-bqf", ft = "qf" },
 	{
 		"stevearc/dressing.nvim",
