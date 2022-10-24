@@ -179,5 +179,18 @@ return {
 			require("user.clangd_ext").config()
 		end,
 	},
-  {'folke/zen-mode.nvim'}
+	{ "folke/zen-mode.nvim" },
+	{
+		"danymat/neogen",
+		config = function()
+			require("neogen").setup({
+				snippet_engine = "luasnip",
+			})
+		end,
+		requires = "nvim-treesitter/nvim-treesitter",
+	},
+	{
+		"sindrets/diffview.nvim",
+		requires = "nvim-lua/plenary.nvim",
+	},
 }
