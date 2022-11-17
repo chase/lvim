@@ -377,4 +377,6 @@ require("lvim.lsp.manager").setup("omnisharp", {
 	end,
 })
 
+require("lvim.lsp.manager").setup("tailwindcss", require("lvim.lsp.providers.tailwindcss"))
+
 require("user.null_lsp")
