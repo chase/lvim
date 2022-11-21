@@ -97,9 +97,9 @@ lvim.builtin.which_key.mappings["q"] = { ":q<cr>", "Quit" }
 lvim.builtin.which_key.mappings["o"] = { ":SymbolsOutline<cr>", "Symbols Outline" }
 lvim.builtin.which_key.mappings.t = {
 	name = "TypeScript",
-	o = { ":TypescriptOrganizeImports<cr>", "Organize Imports" },
-	i = { ":TypescriptAddMissingImports<cr>", "Import All" },
-	r = { ":TypescriptRenameFile<cr>", "Rename File" },
+	o = { ":TSLspOrganize<cr>", "Organize Imports" },
+	i = { ":TSLspImportAll<cr>", "Import All" },
+	r = { ":TSLspRenameFile<cr>", "Rename File" },
 }
 -- Exclude bad extensions from being listed in fzf-lua for files
 local bad_ext = {
