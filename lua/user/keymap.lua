@@ -101,6 +101,7 @@ lvim.builtin.which_key.mappings.t = {
 	i = { ":TSLspImportAll<cr>", "Import All" },
 	r = { ":TSLspRenameFile<cr>", "Rename File" },
 }
+lvim.builtin.which_key.mappings.p = { ":ProjectRoot", "Switch to Project Root" }
 -- Exclude bad extensions from being listed in fzf-lua for files
 local bad_ext = {
 	"svg",

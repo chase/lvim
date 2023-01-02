@@ -84,6 +84,7 @@ lvim.builtin.notify.active = true
 lvim.builtin.project.active = true
 lvim.builtin.project.detection_methods = { "pattern", "lsp" }
 lvim.builtin.project.patterns = { "compile_commands.json", "*.csproj", "*.sln", "package.json", "Makefile", ".git" }
+lvim.builtin.project.manual_mode = true
 
 -- Telescope
 require("user.telescope").config()
@@ -212,7 +213,8 @@ lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.default = ""
 lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.open = ""
 lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.empty = ""
 lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.empty_open = ""
-lvim.builtin.nvimtree.setup.sync_root_with_cwd = true
+lvim.builtin.nvimtree.setup.sync_root_with_cwd = false
+lvim.builtin.nvimtree.setup.update_cwd = true
 lvim.builtin.nvimtree.setup.hijack_netrw = false
 lvim.builtin.nvimtree.setup.disable_netrw = false
 lvim.builtin.nvimtree.setup.git.ignore = true
