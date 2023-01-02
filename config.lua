@@ -250,6 +250,8 @@ lvim.builtin.treesitter.indent.disable = {
 	"typescriptreact",
 }
 
+lvim.builtin.gitsigns.opts.signs.untracked = { text = lvim.builtin.gitsigns.opts.signs.add.text }
+
 -- indent-blankline
 -- only show active line
 vim.g.indent_blankline_char = " "
