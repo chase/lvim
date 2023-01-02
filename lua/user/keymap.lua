@@ -42,6 +42,7 @@ lvim.keys = {
 		["<C-j>"] = "<C-o>o<cmd>silent! LuaSnipUnlinkCurrent<CR>",
 		["<A-j>"] = false,
 		["<A-k>"] = false,
+		["<S-Tab>"] = "<C-d>",
 	},
 }
 
