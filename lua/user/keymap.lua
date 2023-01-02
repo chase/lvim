@@ -124,5 +124,5 @@ local bad_ext = {
 bad_ext = [[ -E '*.]] .. table.concat(bad_ext, [[' -E '*.]]) .. [[']]
 lvim.builtin.which_key.mappings.s.f = {
 	[[<cmd>lua require('fzf-lua').files({fd_opts = "--type f -E node_modules -E .git]] .. bad_ext .. [["})<cr>]],
-	"Text",
+	"Files",
 }
