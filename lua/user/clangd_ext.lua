@@ -19,6 +19,7 @@ M.config = function()
 		"--offset-encoding=utf-16",
 		"--ranking-model=heuristics",
 		"--folding-ranges",
+    "--query-driver=/usr/bin/g++-11,/usr/bin/clang-*"
 	}
 
 	require("clangd_extensions").setup({

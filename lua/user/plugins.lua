@@ -40,10 +40,10 @@ return {
 			local cfg = {
 				bind = true,
 				doc_lines = 0,
-				floating_window = true, -- show hint in a floating window, set to false for virtual text only mode
+				floating_window = false, -- show hint in a floating window, set to false for virtual text only mode
 				floating_window_above_cur_line = true,
 				fix_pos = false, -- set to true, the floating window will not auto-close until finish all parameters
-				hint_enable = false, -- virtual hint enable
+				hint_enable = true, -- virtual hint enable
 				hint_prefix = "  ", -- Panda for parameter
 				hint_scheme = "String",
 				-- use_lspsaga = false, -- set to true if you want to use lspsaga popup
@@ -60,10 +60,10 @@ return {
 				log_path = "debug_log_file_path", -- debug log path
 				padding = "", -- character to pad on left and right of signature can be ' ', or '|'  etc
 				timer_interval = 100,
-        close_timeout = 1000,
-        shadow_blend = 36,
-        shadow_guibg = '#2b3339',
-        transparency = 15,
+				close_timeout = 1000,
+				shadow_blend = 36,
+				shadow_guibg = "#2b3339",
+				transparency = 15,
 			}
 			require("lsp_signature").setup(cfg)
 		end,
@@ -193,4 +193,24 @@ return {
 		"sindrets/diffview.nvim",
 		requires = "nvim-lua/plenary.nvim",
 	},
+	{
+		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+		config = function()
+			require("lsp_lines").setup()
+			vim.diagnostic.config({ virtual_lines = { only_current_line = true } })
+		end,
+	},
+	{
+		"akinsho/git-conflict.nvim",
+		tag = "*",
+		config = function()
+			require("git-conflict").setup()
+		end,
+	},
+  {
+    "https://gitlab.com/yorickpeterse/nvim-pqf.git",
+    config = function()
+      require('pqf').setup()
+    end
+  }
 }

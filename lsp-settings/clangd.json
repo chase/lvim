@@ -1,6 +1,7 @@
 {
   "clangd.restartAfterCrash": true,
   "clangd.fallbackFlags": [
-    "-std=c++17"
-  ],
+    "-std=c++17",
+    "-xc++-header"
+  ]
 }

@@ -59,7 +59,7 @@ lvim.builtin.which_key.mappings["Z"] = {
 	function()
 		require("user.zoxide").list(true)
 	end,
-	"Zoxide (Open Ranger)",
+	"Zoxide (Search File)",
 }
 lvim.builtin.which_key.mappings["v"] = { ":vsplit<cr>", "vsplit" }
 lvim.builtin.which_key.mappings["f"] = { "<cmd>RnvimrToggle<cr>", "Explore Files" }
@@ -79,7 +79,9 @@ lvim.builtin.which_key.mappings["r"] = {
 lvim.builtin.which_key.mappings.j = lvim.builtin.which_key.mappings.b.j
 lvim.builtin.which_key.mappings.s.t = {
 	function()
-		require("fzf-lua").live_grep_native()
+		require("fzf-lua").live_grep_glob({
+      resume = true,
+    })
 	end,
 	"Text",
 }
@@ -102,7 +104,7 @@ lvim.builtin.which_key.mappings.t = {
 	i = { ":TSLspImportAll<cr>", "Import All" },
 	r = { ":TSLspRenameFile<cr>", "Rename File" },
 }
-lvim.builtin.which_key.mappings.p = { ":ProjectRoot", "Switch to Project Root" }
+lvim.builtin.which_key.mappings.p = { ":ProjectRoot<cr>", "Switch to Project Root" }
 -- Exclude bad extensions from being listed in fzf-lua for files
 local bad_ext = {
 	"svg",

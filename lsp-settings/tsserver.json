@@ -1,0 +1,4 @@
+{
+  "typescript.autoClosingTags": true,
+  "typescript.suggest.completeJSDocs": true
+}

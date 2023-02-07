@@ -1,13 +1,8 @@
 -- reload user modules on save
-local reload_hook = require("lvim.config").reload
-require("lvim.config").reload = function(self)
-	for module, _ in pairs(package.loaded) do
-		if module:match("^user%.") or module:match("^icons.lua") then
-			package.loaded[module] = nil
-		end
-	end
-
-	reload_hook(self)
+for module, _ in pairs(package.loaded) do
+  if module:match("^user%.") or module:match("^icons.lua") then
+    package.loaded[module] = nil
+  end
 end
 
 -- everforest
@@ -69,16 +64,15 @@ vim.opt.confirm = true
 vim.opt.mouse = "nicr"
 vim.opt.autoread = true
 vim.opt.pumblend = 10
+vim.cmd([[set formatoptions-=cro]])
 lvim.format_on_save = false
 lvim.lint_on_save = true
 lvim.colorscheme = "everforest"
 
 require("user.keymap")
 
--- Notify
-lvim.builtin.notify.active = true
-
 -- Autopairs
+lvim.builtin.autopairs.active = true
 
 -- project.nvim
 lvim.builtin.project.active = true
@@ -96,7 +90,22 @@ lvim.builtin.cmp.confirm_opts.select = false
 lvim.builtin.cmp.completion.completeopt = "menu,menuone,noselect,preview"
 lvim.builtin.cmp.preselect = cmp.PreselectMode.None
 lvim.builtin.cmp.sources = {
-	{ name = "nvim_lsp" },
+	{
+		name = "nvim_lsp",
+		entry_filter = function(entry, ctx)
+			local kind = require("cmp.types").lsp.CompletionItemKind[entry:get_kind()]
+			if kind == "Snippet" and ctx.prev_context.filetype == "java" then
+				return false
+			end
+			if kind == "Text" then
+				return true
+			end
+			if kind == "Keyword" then
+				return false
+			end
+			return true
+		end,
+	},
 	-- { name = "cmp_tabnine", max_item_count = 3 },
 	{ name = "path", max_item_count = 5 },
 	{ name = "luasnip", max_item_count = 3 },
@@ -109,11 +118,11 @@ lvim.builtin.cmp.sources = {
 }
 lvim.builtin.cmp.sorting = {
 	comparators = {
+		cmp.config.compare.recently_used,
+		cmp.config.compare.score,
 		cmp.config.compare.offset,
 		cmp.config.compare.exact,
-		-- cmp.config.compare.scopes,
-		cmp.config.compare.score,
-		cmp.config.compare.recently_used,
+		cmp.config.compare.scopes,
 		cmp.config.compare.locality,
 		cmp.config.compare.kind,
 		cmp.config.compare.sort_text,
@@ -121,6 +130,8 @@ lvim.builtin.cmp.sorting = {
 		cmp.config.compare.order,
 	},
 }
+lvim.builtin.cmp.formatting.max_width = 120
+lvim.builtin.cmp.formatting.fields = { "kind", "abbr", "menu" }
 if vim.tbl_contains({ "cpp", "c", "objcpp", "objc" }, vim.bo.filetype) then
 	table.insert(lvim.builtin.cmp.sorting.comparators, 2, require("clangd_extensions.cmp_scores"))
 end
@@ -214,13 +225,13 @@ lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.open = ""
 lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.empty = ""
 lvim.builtin.nvimtree.setup.renderer.icons.glyphs.folder.empty_open = ""
 lvim.builtin.nvimtree.setup.sync_root_with_cwd = false
-lvim.builtin.nvimtree.setup.update_cwd = true
+lvim.builtin.nvimtree.setup.update_cwd = false
 lvim.builtin.nvimtree.setup.hijack_netrw = false
 lvim.builtin.nvimtree.setup.disable_netrw = false
 lvim.builtin.nvimtree.setup.git.ignore = true
 -- lvim.builtin.nvimtree.setup.open_on_startup = false
 lvim.builtin.nvimtree.setup.update_focused_file = {
-	enable = true,
+	enable = false,
 	update_root = false,
 }
 lvim.builtin.nvimtree.setup.filters = {
