@@ -228,6 +228,7 @@ lvim.builtin.nvimtree.setup.sync_root_with_cwd = false
 lvim.builtin.nvimtree.setup.update_cwd = false
 lvim.builtin.nvimtree.setup.hijack_netrw = false
 lvim.builtin.nvimtree.setup.disable_netrw = false
+lvim.builtin.nvimtree.setup.respect_buf_cwd = true
 lvim.builtin.nvimtree.setup.git.ignore = true
 -- lvim.builtin.nvimtree.setup.open_on_startup = false
 lvim.builtin.nvimtree.setup.update_focused_file = {
