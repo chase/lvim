@@ -12,6 +12,7 @@ local terms = {}
 
 local function make_toggle_term(cwd)
 	return Terminal:new({
+    cmd = "bash --login",
 		direction = "float",
 		dir = cwd,
 		float_opts = {

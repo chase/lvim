@@ -1,5 +1,5 @@
 return {
-	{ "~/OSS/everforest" },
+	{ name = "everforest", dir = "~/OSS/everforest" },
 	{
 		"kylechui/nvim-surround",
 		config = function()
@@ -8,7 +8,8 @@ return {
 	},
 	{ "knubie/vim-kitty-navigator" },
 	{
-		"~/OSS/nvim-colorizer.lua",
+    name = "nvim-colorizer",
+		dir = "~/OSS/nvim-colorizer.lua",
 		ft = {
 			"typescriptreact",
 			"typescript",
@@ -89,13 +90,14 @@ return {
 		"jose-elias-alvarez/nvim-lsp-ts-utils",
 		ft = { "typescript", "typescriptreact" },
 	},
-	{ "junegunn/fzf", run = "./install --bin" },
+	{ "junegunn/fzf", build = "./install --bin" },
 	{ "kevinhwang91/rnvimr" },
 	{
-		"~/OSS/fzf-lua",
-		requires = {
+    name = "fzf-lua",
+		dir = "~/OSS/fzf-lua",
+		dependencies = {
 			"vijaymarupudi/nvim-fzf",
-			"kyazdani42/nvim-web-devicons",
+			-- "kyazdani42/nvim-web-devicons",
 		}, -- optional for icons
 		config = function()
 			require("fzf-lua").setup({
@@ -153,7 +155,7 @@ return {
 	-- { "kevinhwang91/nvim-bqf", ft = "qf" },
 	{
 		"stevearc/dressing.nvim",
-		requires = { "nvim-telescope/telescope.nvim" },
+		dependencies = { "nvim-telescope/telescope.nvim" },
 		config = function()
 			require("user.dressing").config()
 		end,
@@ -169,7 +171,7 @@ return {
 	{ "jvirtanen/vim-hcl" },
 	{ "nvim-treesitter/playground" },
 	{
-		requires = { "nvim-treesitter/nvim-treesitter" },
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		"Badhi/nvim-treesitter-cpp-tools",
 	},
 	{
@@ -187,14 +189,14 @@ return {
 				snippet_engine = "luasnip",
 			})
 		end,
-		requires = "nvim-treesitter/nvim-treesitter",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
 	},
 	{
 		"sindrets/diffview.nvim",
-		requires = "nvim-lua/plenary.nvim",
+		dependencies =  { "nvim-lua/plenary.nvim" },
 	},
 	{
-		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+		url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
 		config = function()
 			require("lsp_lines").setup()
 			vim.diagnostic.config({ virtual_lines = { only_current_line = true } })
@@ -202,13 +204,13 @@ return {
 	},
 	{
 		"akinsho/git-conflict.nvim",
-		tag = "*",
+		version = "*",
 		config = function()
 			require("git-conflict").setup()
 		end,
 	},
   {
-    "https://gitlab.com/yorickpeterse/nvim-pqf.git",
+    url = "https://gitlab.com/yorickpeterse/nvim-pqf.git",
     config = function()
       require('pqf').setup()
     end
