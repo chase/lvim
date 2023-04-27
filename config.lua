@@ -64,7 +64,23 @@ vim.opt.confirm = true
 vim.opt.mouse = "nicr"
 vim.opt.autoread = true
 vim.opt.pumblend = 10
-vim.cmd([[set formatoptions-=cro]])
+pcall(vim.api.nvim_del_augroup_by_name, "_format_options")
+vim.opt.formatoptions = {
+  ["1"] = false,
+  ["2"] = false, -- Use indent from 2nd line of a paragraph
+  q = true, -- continue comments with gq"
+  c = false, -- Auto-wrap comments using textwidth
+  r = false, -- Continue comments when pressing Enter
+  o = false, -- same as above but on O/o
+  n = true, -- Recognize numbered lists
+  t = false, -- autowrap lines using text width value
+  j = true, -- remove a comment leader when joining lines.
+  -- Only break if the line was not longer than 'textwidth' when the insert
+  -- started and only at a white character that has been entered during the
+  -- current insert command.
+  l = true,
+  v = true,
+}
 lvim.format_on_save = false
 lvim.lint_on_save = true
 lvim.colorscheme = "everforest"
