@@ -1,8 +1,8 @@
 -- reload user modules on save
 for module, _ in pairs(package.loaded) do
-  if module:match("^user%.") or module:match("^icons.lua") then
-    package.loaded[module] = nil
-  end
+	if module:match("^user%.") or module:match("^icons.lua") then
+		package.loaded[module] = nil
+	end
 end
 
 -- everforest
@@ -66,20 +66,20 @@ vim.opt.autoread = true
 vim.opt.pumblend = 10
 pcall(vim.api.nvim_del_augroup_by_name, "_format_options")
 vim.opt.formatoptions = {
-  ["1"] = false,
-  ["2"] = false, -- Use indent from 2nd line of a paragraph
-  q = true, -- continue comments with gq"
-  c = false, -- Auto-wrap comments using textwidth
-  r = false, -- Continue comments when pressing Enter
-  o = false, -- same as above but on O/o
-  n = true, -- Recognize numbered lists
-  t = false, -- autowrap lines using text width value
-  j = true, -- remove a comment leader when joining lines.
-  -- Only break if the line was not longer than 'textwidth' when the insert
-  -- started and only at a white character that has been entered during the
-  -- current insert command.
-  l = true,
-  v = true,
+	["1"] = false,
+	["2"] = false, -- Use indent from 2nd line of a paragraph
+	q = true, -- continue comments with gq"
+	c = false, -- Auto-wrap comments using textwidth
+	r = false, -- Continue comments when pressing Enter
+	o = false, -- same as above but on O/o
+	n = true, -- Recognize numbered lists
+	t = false, -- autowrap lines using text width value
+	j = true, -- remove a comment leader when joining lines.
+	-- Only break if the line was not longer than 'textwidth' when the insert
+	-- started and only at a white character that has been entered during the
+	-- current insert command.
+	l = true,
+	v = true,
 }
 lvim.format_on_save = false
 lvim.lint_on_save = true
@@ -136,10 +136,10 @@ lvim.builtin.cmp.sorting = {
 	comparators = {
 		cmp.config.compare.recently_used,
 		cmp.config.compare.score,
+		cmp.config.compare.locality,
 		cmp.config.compare.offset,
 		cmp.config.compare.exact,
 		cmp.config.compare.scopes,
-		cmp.config.compare.locality,
 		cmp.config.compare.kind,
 		cmp.config.compare.sort_text,
 		cmp.config.compare.length,
@@ -149,9 +149,12 @@ lvim.builtin.cmp.sorting = {
 lvim.builtin.cmp.formatting.max_width = 120
 lvim.builtin.cmp.formatting.fields = { "kind", "abbr", "menu" }
 if vim.tbl_contains({ "cpp", "c", "objcpp", "objc" }, vim.bo.filetype) then
-	table.insert(lvim.builtin.cmp.sorting.comparators, 2, require("clangd_extensions.cmp_scores"))
+	table.insert(lvim.builtin.cmp.sorting.comparators, 3, require("clangd_extensions.cmp_scores"))
 end
-
+lvim.builtin.cmp.performance = {
+	debounce = 100,
+	throttle = 40,
+}
 -- Dashboard (or not)
 lvim.builtin.alpha.active = false
 
@@ -246,6 +249,11 @@ lvim.builtin.nvimtree.setup.hijack_netrw = false
 lvim.builtin.nvimtree.setup.disable_netrw = false
 lvim.builtin.nvimtree.setup.respect_buf_cwd = true
 lvim.builtin.nvimtree.setup.git.ignore = true
+lvim.builtin.nvimtree.setup.filesystem_watchers.ignore_dirs = {
+	"node_modules",
+	".git",
+	".cache",
+}
 -- lvim.builtin.nvimtree.setup.open_on_startup = false
 lvim.builtin.nvimtree.setup.update_focused_file = {
 	enable = false,
