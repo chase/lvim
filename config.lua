@@ -6,7 +6,7 @@ for module, _ in pairs(package.loaded) do
 end
 
 -- everforest
-vim.g.everforest_background = "medium"
+vim.g.everforest_background = "hard"
 vim.g.everforest_sign_column_background = "grey"
 vim.g.everforest_enable_italic = 0
 vim.g.everforest_disable_italic_comment = 1
@@ -93,7 +93,7 @@ lvim.builtin.autopairs.active = true
 -- project.nvim
 lvim.builtin.project.active = true
 lvim.builtin.project.detection_methods = { "pattern", "lsp" }
-lvim.builtin.project.patterns = { "compile_commands.json", "*.csproj", "*.sln", "package.json", "Makefile", ".git" }
+lvim.builtin.project.patterns = { "compile_commands.json", "*.csproj", "*.sln", "package.json", "Makefile", "CMakeLists.txt", ".git"  }
 lvim.builtin.project.manual_mode = true
 
 -- Telescope
@@ -126,34 +126,37 @@ lvim.builtin.cmp.sources = {
 	{ name = "path", max_item_count = 5 },
 	{ name = "luasnip", max_item_count = 3 },
 	{ name = "buffer", max_item_count = 5, keyword_length = 5 },
-	{ name = "nvim_lua" },
+	-- { name = "nvim_lua" },
 	-- { name = "calc" },
 	-- { name = "emoji" },
 	-- { name = "treesitter" },
 	{ name = "crates" },
 }
-lvim.builtin.cmp.sorting = {
-	comparators = {
-		cmp.config.compare.recently_used,
-		cmp.config.compare.score,
-		cmp.config.compare.locality,
-		cmp.config.compare.offset,
-		cmp.config.compare.exact,
-		cmp.config.compare.scopes,
-		cmp.config.compare.kind,
-		cmp.config.compare.sort_text,
-		cmp.config.compare.length,
-		cmp.config.compare.order,
-	},
-}
-lvim.builtin.cmp.formatting.max_width = 120
-lvim.builtin.cmp.formatting.fields = { "kind", "abbr", "menu" }
+-- lvim.builtin.cmp.sorting = {
+-- 	comparators = {
+-- 		cmp.config.compare.recently_used,
+-- 		cmp.config.compare.score,
+-- 		cmp.config.compare.locality,
+-- 		cmp.config.compare.offset,
+-- 		cmp.config.compare.exact,
+-- 		cmp.config.compare.scopes,
+-- 		cmp.config.compare.kind,
+-- 		cmp.config.compare.sort_text,
+-- 		cmp.config.compare.length,
+-- 		cmp.config.compare.order,
+-- 	},
+-- }
+-- lvim.builtin.cmp.formatting.max_width = 120
+-- lvim.builtin.cmp.formatting.fields = { "kind", "abbr", "menu" }
 if vim.tbl_contains({ "cpp", "c", "objcpp", "objc" }, vim.bo.filetype) then
 	table.insert(lvim.builtin.cmp.sorting.comparators, 3, require("clangd_extensions.cmp_scores"))
 end
 lvim.builtin.cmp.performance = {
-	debounce = 100,
+	debounce = 10,
 	throttle = 40,
+  fetching_timeout = 100,
+  async_budget = 1,
+  max_view_entires = 20
 }
 -- Dashboard (or not)
 lvim.builtin.alpha.active = false
@@ -345,8 +348,9 @@ lvim.builtin.lualine.sections.lualine_x = {
 }
 
 -- LSP setup
-lvim.lsp.diagnostics.virtual_text = false
-lvim.lsp.document_highlight = true
+-- lvim.lsp.diagnostics.virtual_text = false
+vim.diagnostic.config({ virtual_text = false })
+lvim.lsp.document_highlight = false
 lvim.lsp.code_lens_refresh = false
 lvim.lsp.automatic_servers_installation = false
 lvim.lsp.automatic_configuration.skipped_servers = vim.list_extend(
@@ -399,6 +403,29 @@ local autocmds = {
 		{ "cpp", "c", "objc", "objcpp" },
 		function()
 			vim.cmd("nmap <M-o> <cmd>ClangdSwitchSourceHeader<cr>")
+		end,
+	},
+	{
+		"FileType",
+		{ "cpp", "c", "objc", "objcpp" },
+		function()
+vim.opt.formatoptions = {
+	["1"] = false,
+	["2"] = false, -- Use indent from 2nd line of a paragraph
+	q = true, -- continue comments with gq"
+	c = false, -- Auto-wrap comments using textwidth
+	r = false, -- Continue comments when pressing Enter
+	o = false, -- same as above but on O/o
+	n = true, -- Recognize numbered lists
+	t = false, -- autowrap lines using text width value
+	j = true, -- remove a comment leader when joining lines.
+	-- Only break if the line was not longer than 'textwidth' when the insert
+	-- started and only at a white character that has been entered during the
+	-- current insert command.
+	l = true,
+	v = true,
+}
+			-- vim.cmd("nmap <M-o> <cmd>ClangdSwitchSourceHeader<cr>")
 		end,
 	},
 }

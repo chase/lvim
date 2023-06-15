@@ -8,7 +8,7 @@ return {
 	},
 	{ "knubie/vim-kitty-navigator" },
 	{
-    name = "nvim-colorizer",
+		name = "nvim-colorizer",
 		dir = "~/OSS/nvim-colorizer.lua",
 		ft = {
 			"typescriptreact",
@@ -34,41 +34,41 @@ return {
       ]])
 		end,
 	},
-	{
-		"ray-x/lsp_signature.nvim",
-		event = "BufRead",
-		config = function()
-			local cfg = {
-				bind = true,
-				doc_lines = 0,
-				floating_window = false, -- show hint in a floating window, set to false for virtual text only mode
-				floating_window_above_cur_line = true,
-				fix_pos = false, -- set to true, the floating window will not auto-close until finish all parameters
-				hint_enable = true, -- virtual hint enable
-				hint_prefix = "  ", -- Panda for parameter
-				hint_scheme = "String",
-				-- use_lspsaga = false, -- set to true if you want to use lspsaga popup
-				hi_parameter = "Search", -- how your parameter will be highlight
-				max_height = 5, -- max height of signature floating_window, if content is more than max_height, you can scroll down
-				-- to view the hiding contents
-				max_width = 80, -- max_width of signature floating_window, line will be wrapped if exceed max_width
-				handler_opts = {
-					border = "rounded", -- double, single, shadow, none
-				},
-				extra_trigger_chars = { "(", ",", "{" }, -- Array of extra characters that will trigger signature completion, e.g., {"(", ","}
-				zindex = 200, -- by default it will be on top of all floating windows, set to 50 send it to bottom
-				debug = false, -- set to true to enable debug logging
-				log_path = "debug_log_file_path", -- debug log path
-				padding = "", -- character to pad on left and right of signature can be ' ', or '|'  etc
-				timer_interval = 100,
-				close_timeout = 1000,
-				shadow_blend = 36,
-				shadow_guibg = "#2b3339",
-				transparency = 15,
-			}
-			require("lsp_signature").setup(cfg)
-		end,
-	},
+	-- {
+	-- 	"ray-x/lsp_signature.nvim",
+	-- 	event = "BufRead",
+	-- 	config = function()
+	-- 		local cfg = {
+	-- 			bind = true,
+	-- 			doc_lines = 0,
+	-- 			floating_window = false, -- show hint in a floating window, set to false for virtual text only mode
+	-- 			floating_window_above_cur_line = true,
+	-- 			fix_pos = false, -- set to true, the floating window will not auto-close until finish all parameters
+	-- 			hint_enable = true, -- virtual hint enable
+	-- 			hint_prefix = "  ", -- Panda for parameter
+	-- 			hint_scheme = "String",
+	-- 			-- use_lspsaga = false, -- set to true if you want to use lspsaga popup
+	-- 			hi_parameter = "Search", -- how your parameter will be highlight
+	-- 			max_height = 5, -- max height of signature floating_window, if content is more than max_height, you can scroll down
+	-- 			-- to view the hiding contents
+	-- 			max_width = 80, -- max_width of signature floating_window, line will be wrapped if exceed max_width
+	-- 			handler_opts = {
+	-- 				border = "rounded", -- double, single, shadow, none
+	-- 			},
+	-- 			extra_trigger_chars = { "(", ",", "{" }, -- Array of extra characters that will trigger signature completion, e.g., {"(", ","}
+	-- 			zindex = 200, -- by default it will be on top of all floating windows, set to 50 send it to bottom
+	-- 			debug = false, -- set to true to enable debug logging
+	-- 			log_path = "debug_log_file_path", -- debug log path
+	-- 			padding = "", -- character to pad on left and right of signature can be ' ', or '|'  etc
+	-- 			timer_interval = 100,
+	-- 			close_timeout = 1000,
+	-- 			shadow_blend = 36,
+	-- 			shadow_guibg = "#2b3339",
+	-- 			transparency = 15,
+	-- 		}
+	-- 		require("lsp_signature").setup(cfg)
+	-- 	end,
+	-- },
 	-- {
 	--   "folke/trouble.nvim",
 	--   event = "BufRead",
@@ -91,9 +91,9 @@ return {
 		ft = { "typescript", "typescriptreact" },
 	},
 	{ "junegunn/fzf", build = "./install --bin" },
-	{ "kevinhwang91/rnvimr" },
+	-- { "kevinhwang91/rnvimr" },
 	{
-    name = "fzf-lua",
+		name = "fzf-lua",
 		dir = "~/OSS/fzf-lua",
 		dependencies = {
 			"vijaymarupudi/nvim-fzf",
@@ -169,11 +169,17 @@ return {
 		end,
 	},
 	{ "jvirtanen/vim-hcl" },
-	{ "nvim-treesitter/playground" },
-	{
-		dependencies = { "nvim-treesitter/nvim-treesitter" },
-		"Badhi/nvim-treesitter-cpp-tools",
-	},
+	-- { "nvim-treesitter/playground" },
+	-- {
+	-- 	ft = { "c", "cpp", "objc", "objcpp" },
+	-- 	dependencies = { "nvim-treesitter/nvim-treesitter" },
+	-- 	"Badhi/nvim-treesitter-cpp-tools",
+ --    config = function()
+ --      require('nt-cpp-tools').setup({
+ --        source_extensions = 'cc'
+ --      })
+ --    end
+	-- },
 	{
 		"p00f/clangd_extensions.nvim",
 		ft = { "c", "cpp", "objc", "objcpp" },
@@ -191,28 +197,41 @@ return {
 		end,
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 	},
-	{
-		"sindrets/diffview.nvim",
-		dependencies =  { "nvim-lua/plenary.nvim" },
-	},
-	{
-		url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-		config = function()
-			require("lsp_lines").setup()
-			vim.diagnostic.config({ virtual_lines = { only_current_line = true } })
-		end,
-	},
+	-- {
+	-- 	"sindrets/diffview.nvim",
+	-- 	dependencies = { "nvim-lua/plenary.nvim" },
+	-- },
+	-- {
+	-- 	url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+	-- 	config = function()
+	-- 		require("lsp_lines").setup()
+	-- 		vim.diagnostic.config({ virtual_lines = { only_current_line = true } })
+	-- 	end,
+	-- },
 	{
 		"akinsho/git-conflict.nvim",
 		version = "*",
 		config = function()
-			require("git-conflict").setup()
+			require("git-conflict").setup {
+        default_mappings = {
+          ours = 'co',
+          theirs = 'ct',
+          both = 'cb',
+          none = 'c0',
+          next = ']x',
+          prev = '[x',
+        },
+        highlights = {
+          incoming = nil,
+          current = nil,
+        }
+      }
 		end,
 	},
-  {
-    url = "https://gitlab.com/yorickpeterse/nvim-pqf.git",
-    config = function()
-      require('pqf').setup()
-    end
-  }
+	{
+		url = "https://github.com/yorickpeterse/nvim-pqf",
+		config = function()
+			require("pqf").setup()
+		end,
+	},
 }

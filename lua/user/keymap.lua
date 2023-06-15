@@ -25,6 +25,8 @@ lvim.keys = {
 		end,
 		["H"] = "<cmd>BufferLineCyclePrev<cr>",
 		["L"] = "<cmd>BufferLineCycleNext<cr>",
+		["]x"] = '<Plug>(git-conflict-next-conflict)',
+		["[x"] = '<Plug>(git-conflict-prev-conflict)',
 	},
 	visual_mode = {
 		["<A-j>"] = false,

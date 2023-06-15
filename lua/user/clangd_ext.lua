@@ -3,11 +3,14 @@ local M = {}
 M.config = function()
 	local capabilities = require("lvim.lsp").common_capabilities()
 	capabilities.offsetEncoding = { "utf-16" }
+  capabilities.textDocument.semanticTokens = false
+  capabilities.textDocument.semanticHighlightingCapabilities = { semanticHighlighting = false }
+  capabilities.semanticTokensProvider = nil
 
 	local clangd_flags = {
 		"--fallback-style=google",
 		"--background-index",
-		"-j=16",
+		"-j=4",
 		"--all-scopes-completion",
 		"--pch-storage=disk",
 		"--clang-tidy",
@@ -35,11 +38,9 @@ M.config = function()
 		},
 		extensions = {
 			autoSetHints = false,
-			inlay_hints = {
-				parameter_hints_prefix = "",
-				other_hints_prefix = "",
-			},
-		},
+			inlay_hints = false,
+      ast = false
+    },
 	})
 end
 return M
