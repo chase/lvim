@@ -6,13 +6,13 @@ for module, _ in pairs(package.loaded) do
 end
 
 -- everforest
-vim.g.everforest_background = "medium"
+vim.g.everforest_background = "hard"
 vim.g.everforest_sign_column_background = "grey"
 vim.g.everforest_enable_italic = 0
 vim.g.everforest_disable_italic_comment = 1
 vim.g.everforest_diagnostic_virtual_text = "colored"
 vim.g.everforest_show_eob = 0
-vim.g.everforest_ui_contrast = "low"
+vim.g.everforest_ui_contrast = "medium"
 vim.g.everforest_better_performance = 1
 
 -- ranger
