@@ -174,11 +174,11 @@ return {
 	-- 	ft = { "c", "cpp", "objc", "objcpp" },
 	-- 	dependencies = { "nvim-treesitter/nvim-treesitter" },
 	-- 	"Badhi/nvim-treesitter-cpp-tools",
- --    config = function()
- --      require('nt-cpp-tools').setup({
- --        source_extensions = 'cc'
- --      })
- --    end
+	--    config = function()
+	--      require('nt-cpp-tools').setup({
+	--        source_extensions = 'cc'
+	--      })
+	--    end
 	-- },
 	{
 		"p00f/clangd_extensions.nvim",
@@ -212,26 +212,42 @@ return {
 		"akinsho/git-conflict.nvim",
 		version = "*",
 		config = function()
-			require("git-conflict").setup {
-        default_mappings = {
-          ours = 'co',
-          theirs = 'ct',
-          both = 'cb',
-          none = 'c0',
-          next = ']x',
-          prev = '[x',
-        },
-        highlights = {
-          incoming = nil,
-          current = nil,
-        }
-      }
+			require("git-conflict").setup({
+				default_mappings = {
+					ours = "co",
+					theirs = "ct",
+					both = "cb",
+					none = "c0",
+					next = "]x",
+					prev = "[x",
+				},
+				highlights = {
+					incoming = nil,
+					current = nil,
+				},
+			})
 		end,
 	},
 	{
 		url = "https://github.com/yorickpeterse/nvim-pqf",
 		config = function()
 			require("pqf").setup()
+		end,
+	},
+	{
+		"simrat39/rust-tools.nvim",
+    lazy = true,
+		config = function()
+			require("user.rust_tools").config()
+		end,
+    ft = { "rust", "rs" }
+	},
+	{
+		"saecki/crates.nvim",
+		event = { "BufRead Cargo.toml" },
+		dependencies = { { "nvim-lua/plenary.nvim" } },
+		config = function()
+			require("crates").setup {}
 		end,
 	},
 }
