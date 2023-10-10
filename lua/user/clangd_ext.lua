@@ -3,6 +3,7 @@ local M = {}
 M.config = function()
 	local capabilities = require("lvim.lsp").common_capabilities()
 	capabilities.offsetEncoding = { "utf-16" }
+  capabilities.semanticTokensProvider = false
 
 	local clangd_flags = {
 		"--fallback-style=google",

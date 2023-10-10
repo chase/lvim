@@ -57,7 +57,7 @@ end
 
 -- general
 vim.opt.timeoutlen = 200
-vim.opt.clipboard = "unnamed"
+vim.opt.clipboard = ""
 vim.opt.fillchars = "vert:▕,verthoriz:🮀,horiz:🮀,horizdown:🮀,horizup:🮀,vertleft:▕,vertright:▕"
 vim.opt.cmdheight = 1
 vim.opt.confirm = true
@@ -73,6 +73,7 @@ require("user.keymap")
 
 -- Autopairs
 lvim.builtin.autopairs.active = true
+lvim.builtin.autopairs.enable_afterquote = false
 
 -- project.nvim
 lvim.builtin.project.active = true
@@ -321,7 +322,7 @@ lvim.builtin.lualine.sections.lualine_x = {
 
 -- LSP setup
 lvim.lsp.diagnostics.virtual_text = false
-lvim.lsp.document_highlight = true
+lvim.lsp.document_highlight = false
 lvim.lsp.code_lens_refresh = false
 lvim.lsp.automatic_servers_installation = false
 lvim.lsp.automatic_configuration.skipped_servers = vim.list_extend(
@@ -373,7 +374,7 @@ local autocmds = {
 		"FileType",
 		{ "cpp", "c", "objc", "objcpp" },
 		function()
-			vim.cmd("nmap <M-o> <cmd>ClangdSwitchSourceHeader<cr>")
+			vim.cmd("nmap <A-o> <cmd>ClangdSwitchSourceHeader<cr>")
 		end,
 	},
 }

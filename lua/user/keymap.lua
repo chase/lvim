@@ -97,7 +97,7 @@ lvim.builtin.which_key.mappings["gh"] = {
 }
 lvim.builtin.which_key.mappings["c"] = { ":BufferKill<cr>", "Close Buffer" }
 lvim.builtin.which_key.mappings["q"] = { ":q<cr>", "Quit" }
-lvim.builtin.which_key.mappings["o"] = { ":SymbolsOutline<cr>", "Symbols Outline" }
+lvim.builtin.which_key.mappings["o"] = { "<cmd>ClangdSwitchSourceHeader<cr>", "Switch Source Header" }
 lvim.builtin.which_key.mappings.t = {
 	name = "TypeScript",
 	o = { ":TSLspOrganize<cr>", "Organize Imports" },
