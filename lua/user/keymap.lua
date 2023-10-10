@@ -25,6 +25,8 @@ lvim.keys = {
 		end,
 		["H"] = "<cmd>BufferLineCyclePrev<cr>",
 		["L"] = "<cmd>BufferLineCycleNext<cr>",
+		["]x"] = '<Plug>(git-conflict-next-conflict)',
+		["[x"] = '<Plug>(git-conflict-prev-conflict)',
 	},
 	visual_mode = {
 		["<A-j>"] = false,
@@ -36,7 +38,11 @@ lvim.keys = {
 		["<A-j>"] = false,
 		["<A-k>"] = false,
 	},
-	term_mode = { ["<C-`>"] = "<cmd>lua require('user.terminal').toggle()<cr>" },
+	term_mode = {
+		["<C-`>"] = function()
+			require("user.terminal").toggle()
+		end,
+	},
 	insert_mode = {
 		["<C-l>"] = "<C-o>$<cmd>silent! LuaSnipUnlinkCurrent<CR>",
 		["<C-j>"] = "<C-o>o<cmd>silent! LuaSnipUnlinkCurrent<CR>",
@@ -52,12 +58,18 @@ lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Project
 lvim.builtin.which_key.mappings["z"] = {
 	function()
 		require("user.zoxide").list()
+    vim.schedule(function ()
+        require("project_nvim.project").on_buf_enter()
+    end)
 	end,
 	"Zoxide",
 }
 lvim.builtin.which_key.mappings["Z"] = {
 	function()
 		require("user.zoxide").list(true)
+    vim.schedule(function ()
+        require("project_nvim.project").on_buf_enter()
+    end)
 	end,
 	"Zoxide (Search File)",
 }
@@ -73,6 +85,9 @@ lvim.builtin.which_key.mappings.g.g = {
 lvim.builtin.which_key.mappings["r"] = {
 	function()
 		require("fzf-lua").oldfiles({ cwd_only = true })
+    vim.schedule(function ()
+        require("project_nvim.project").on_buf_enter()
+    end)
 	end,
 	"Recent Files",
 }
@@ -80,8 +95,8 @@ lvim.builtin.which_key.mappings.j = lvim.builtin.which_key.mappings.b.j
 lvim.builtin.which_key.mappings.s.t = {
 	function()
 		require("fzf-lua").live_grep_glob({
-      resume = true,
-    })
+			resume = true,
+		})
 	end,
 	"Text",
 }

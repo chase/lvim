@@ -1,8 +1,8 @@
 -- reload user modules on save
 for module, _ in pairs(package.loaded) do
-  if module:match("^user%.") or module:match("^icons.lua") then
-    package.loaded[module] = nil
-  end
+	if module:match("^user%.") or module:match("^icons.lua") then
+		package.loaded[module] = nil
+	end
 end
 
 -- everforest
@@ -64,7 +64,23 @@ vim.opt.confirm = true
 vim.opt.mouse = "nicr"
 vim.opt.autoread = true
 vim.opt.pumblend = 10
-vim.cmd([[set formatoptions-=cro]])
+pcall(vim.api.nvim_del_augroup_by_name, "_format_options")
+vim.opt.formatoptions = {
+	["1"] = false,
+	["2"] = false, -- Use indent from 2nd line of a paragraph
+	q = true, -- continue comments with gq"
+	c = false, -- Auto-wrap comments using textwidth
+	r = false, -- Continue comments when pressing Enter
+	o = false, -- same as above but on O/o
+	n = true, -- Recognize numbered lists
+	t = false, -- autowrap lines using text width value
+	j = true, -- remove a comment leader when joining lines.
+	-- Only break if the line was not longer than 'textwidth' when the insert
+	-- started and only at a white character that has been entered during the
+	-- current insert command.
+	l = true,
+	v = true,
+}
 lvim.format_on_save = false
 lvim.lint_on_save = true
 lvim.colorscheme = "everforest"
@@ -78,7 +94,7 @@ lvim.builtin.autopairs.enable_afterquote = false
 -- project.nvim
 lvim.builtin.project.active = true
 lvim.builtin.project.detection_methods = { "pattern", "lsp" }
-lvim.builtin.project.patterns = { "compile_commands.json", "*.csproj", "*.sln", "package.json", "Makefile", ".git" }
+lvim.builtin.project.patterns = { "compile_commands.json", "*.csproj", "*.sln", "package.json", "Makefile", "CMakeLists.txt", ".git"  }
 lvim.builtin.project.manual_mode = true
 
 -- Telescope
@@ -111,32 +127,38 @@ lvim.builtin.cmp.sources = {
 	{ name = "path", max_item_count = 5 },
 	{ name = "luasnip", max_item_count = 3 },
 	{ name = "buffer", max_item_count = 5, keyword_length = 5 },
-	{ name = "nvim_lua" },
+	-- { name = "nvim_lua" },
 	-- { name = "calc" },
 	-- { name = "emoji" },
 	-- { name = "treesitter" },
 	{ name = "crates" },
 }
-lvim.builtin.cmp.sorting = {
-	comparators = {
-		cmp.config.compare.recently_used,
-		cmp.config.compare.score,
-		cmp.config.compare.offset,
-		cmp.config.compare.exact,
-		cmp.config.compare.scopes,
-		cmp.config.compare.locality,
-		cmp.config.compare.kind,
-		cmp.config.compare.sort_text,
-		cmp.config.compare.length,
-		cmp.config.compare.order,
-	},
-}
-lvim.builtin.cmp.formatting.max_width = 120
-lvim.builtin.cmp.formatting.fields = { "kind", "abbr", "menu" }
+-- lvim.builtin.cmp.sorting = {
+-- 	comparators = {
+-- 		cmp.config.compare.recently_used,
+-- 		cmp.config.compare.score,
+-- 		cmp.config.compare.locality,
+-- 		cmp.config.compare.offset,
+-- 		cmp.config.compare.exact,
+-- 		cmp.config.compare.scopes,
+-- 		cmp.config.compare.kind,
+-- 		cmp.config.compare.sort_text,
+-- 		cmp.config.compare.length,
+-- 		cmp.config.compare.order,
+-- 	},
+-- }
+-- lvim.builtin.cmp.formatting.max_width = 120
+-- lvim.builtin.cmp.formatting.fields = { "kind", "abbr", "menu" }
 if vim.tbl_contains({ "cpp", "c", "objcpp", "objc" }, vim.bo.filetype) then
-	table.insert(lvim.builtin.cmp.sorting.comparators, 2, require("clangd_extensions.cmp_scores"))
+	table.insert(lvim.builtin.cmp.sorting.comparators, 3, require("clangd_extensions.cmp_scores"))
 end
-
+lvim.builtin.cmp.performance = {
+	debounce = 10,
+	throttle = 40,
+  fetching_timeout = 100,
+  async_budget = 1,
+  max_view_entires = 20
+}
 -- Dashboard (or not)
 lvim.builtin.alpha.active = false
 
@@ -229,7 +251,13 @@ lvim.builtin.nvimtree.setup.sync_root_with_cwd = false
 lvim.builtin.nvimtree.setup.update_cwd = false
 lvim.builtin.nvimtree.setup.hijack_netrw = false
 lvim.builtin.nvimtree.setup.disable_netrw = false
+lvim.builtin.nvimtree.setup.respect_buf_cwd = true
 lvim.builtin.nvimtree.setup.git.ignore = true
+lvim.builtin.nvimtree.setup.filesystem_watchers.ignore_dirs = {
+	"node_modules",
+	".git",
+	".cache",
+}
 -- lvim.builtin.nvimtree.setup.open_on_startup = false
 lvim.builtin.nvimtree.setup.update_focused_file = {
 	enable = false,
@@ -321,7 +349,8 @@ lvim.builtin.lualine.sections.lualine_x = {
 }
 
 -- LSP setup
-lvim.lsp.diagnostics.virtual_text = false
+-- lvim.lsp.diagnostics.virtual_text = false
+vim.diagnostic.config({ virtual_text = false })
 lvim.lsp.document_highlight = false
 lvim.lsp.code_lens_refresh = false
 lvim.lsp.automatic_servers_installation = false
@@ -375,6 +404,29 @@ local autocmds = {
 		{ "cpp", "c", "objc", "objcpp" },
 		function()
 			vim.cmd("nmap <A-o> <cmd>ClangdSwitchSourceHeader<cr>")
+		end,
+	},
+	{
+		"FileType",
+		{ "cpp", "c", "objc", "objcpp" },
+		function()
+vim.opt.formatoptions = {
+	["1"] = false,
+	["2"] = false, -- Use indent from 2nd line of a paragraph
+	q = true, -- continue comments with gq"
+	c = false, -- Auto-wrap comments using textwidth
+	r = false, -- Continue comments when pressing Enter
+	o = false, -- same as above but on O/o
+	n = true, -- Recognize numbered lists
+	t = false, -- autowrap lines using text width value
+	j = true, -- remove a comment leader when joining lines.
+	-- Only break if the line was not longer than 'textwidth' when the insert
+	-- started and only at a white character that has been entered during the
+	-- current insert command.
+	l = true,
+	v = true,
+}
+			-- vim.cmd("nmap <M-o> <cmd>ClangdSwitchSourceHeader<cr>")
 		end,
 	},
 }
