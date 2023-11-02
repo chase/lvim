@@ -41,6 +41,9 @@ M.config = function()
 			inlay_hints = false,
       ast = false
     },
+    filetypes = {
+      "cpp", "cxx", "cc", "c", "hxx", "h"
+    }
 	})
 end
 return M

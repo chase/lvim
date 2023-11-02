@@ -182,10 +182,7 @@ return {
 	-- },
 	{
 		"p00f/clangd_extensions.nvim",
-		ft = { "c", "cpp", "objc", "objcpp" },
-		config = function()
-			require("user.clangd_ext").config()
-		end,
+		ft = { "c", "cpp", "objc", "objcpp", "h", "hpp" },
 	},
 	{ "folke/zen-mode.nvim" },
 	{
