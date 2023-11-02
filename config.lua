@@ -149,9 +149,9 @@ lvim.builtin.cmp.sources = {
 -- }
 -- lvim.builtin.cmp.formatting.max_width = 120
 -- lvim.builtin.cmp.formatting.fields = { "kind", "abbr", "menu" }
-if vim.tbl_contains({ "cpp", "c", "objcpp", "objc" }, vim.bo.filetype) then
-	table.insert(lvim.builtin.cmp.sorting.comparators, 3, require("clangd_extensions.cmp_scores"))
-end
+-- if vim.tbl_contains({ "cpp", "c", "objcpp", "objc" }, vim.bo.filetype) then
+-- 	table.insert(lvim.builtin.cmp.sorting.comparators, 3, require("clangd_extensions.cmp_scores"))
+-- end
 lvim.builtin.cmp.performance = {
 	debounce = 10,
 	throttle = 40,
