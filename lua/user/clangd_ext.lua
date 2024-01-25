@@ -22,14 +22,14 @@ M.config = function()
 		"--offset-encoding=utf-16",
 		"--ranking-model=heuristics",
 		"--folding-ranges",
-    "--query-driver=/usr/bin/g++-11,/usr/bin/clang-*"
+    "--query-driver=/usr/bin/clang-*,/usr/bin/g++-11"
 	}
 
 	require("clangd_extensions").setup({
 		server = {
 			root_dir = function(fname)
 				local util = require("lspconfig.util")
-				return util.root_pattern("compile_commands.json", ".git")(fname)
+				return util.root_pattern("compile_commands.json", ".clangd", ".git")(fname)
 			end,
 			cmd = { "clangd", unpack(clangd_flags) },
 			capabilities = capabilities,

@@ -46,7 +46,7 @@ end
 function M.toggle()
 	local cwd = vim.fn.getcwd()
 	local term = terms[cwd]
-	if not term then
+	if cwd and not term then
 		term = make_toggle_term(cwd)
 		terms[cwd] = term
 	end

@@ -87,13 +87,19 @@ lvim.colorscheme = "everforest"
 
 require("user.keymap")
 
+-- Indentlines
+lvim.builtin.indentlines.active = false
+require('user.indent_blankline').setup()
+
 -- Autopairs
 lvim.builtin.autopairs.active = true
+lvim.builtin.autopairs.enable_check_bracket_line = true
 
 -- project.nvim
 lvim.builtin.project.active = true
 lvim.builtin.project.detection_methods = { "pattern", "lsp" }
-lvim.builtin.project.patterns = { "compile_commands.json", "*.csproj", "*.sln", "package.json", "Makefile", "CMakeLists.txt", ".git"  }
+lvim.builtin.project.patterns =
+	{ "compile_commands.json", "*.csproj", "*.sln", "package.json", "Makefile", "CMakeLists.txt", ".git" }
 lvim.builtin.project.manual_mode = true
 
 -- Telescope
@@ -154,9 +160,9 @@ lvim.builtin.cmp.sources = {
 lvim.builtin.cmp.performance = {
 	debounce = 10,
 	throttle = 40,
-  fetching_timeout = 100,
-  async_budget = 1,
-  max_view_entires = 20
+	fetching_timeout = 100,
+	async_budget = 1,
+	max_view_entires = 20,
 }
 -- Dashboard (or not)
 lvim.builtin.alpha.active = false
@@ -201,7 +207,7 @@ lvim.builtin.bufferline.options.show_tab_indicators = false
 
 local icons = lvim.icons.kind
 lvim.builtin.breadcrumbs.active = true
-lvim.builtin.breadcrumbs.options.separator = "  "
+-- lvim.builtin.breadcrumbs.options.separator = "〉"
 lvim.builtin.breadcrumbs.options.icons = {
 	Array = icons.Array .. " ",
 	-- Boolean = icons.Boolean .. " ",
@@ -256,6 +262,7 @@ lvim.builtin.nvimtree.setup.filesystem_watchers.ignore_dirs = {
 	"node_modules",
 	".git",
 	".cache",
+	"translations",
 }
 -- lvim.builtin.nvimtree.setup.open_on_startup = false
 lvim.builtin.nvimtree.setup.update_focused_file = {
@@ -290,10 +297,6 @@ lvim.builtin.treesitter.indent.disable = {
 }
 
 lvim.builtin.gitsigns.opts.signs.untracked = { text = lvim.builtin.gitsigns.opts.signs.add.text }
-
--- indent-blankline
--- only show active line
-vim.g.indent_blankline_char = " "
 
 -- lualine
 lvim.builtin.lualine.options.disabled_filetypes = { "toggleterm", "dashboard", "terminal" }
@@ -352,10 +355,13 @@ lvim.builtin.lualine.sections.lualine_x = {
 vim.diagnostic.config({ virtual_text = false })
 lvim.lsp.document_highlight = false
 lvim.lsp.code_lens_refresh = false
-lvim.lsp.automatic_servers_installation = false
+lvim.lsp.installer.setup.automatic_installation = false
+lvim.lsp.installer.setup.ensure_installed = {
+	"tailwindcss",
+}
 lvim.lsp.automatic_configuration.skipped_servers = vim.list_extend(
 	lvim.lsp.automatic_configuration.skipped_servers,
-	{ "tailwindcss", "emmet_ls", "angular-language-server", "clangd", "pyright", "omnisharp" }
+	{ "cssls", "tailwindcss", "emmet_ls", "angular-language-server", "clangd", "pyright", "omnisharp" }
 )
 
 -- Additional Plugins
@@ -399,6 +405,28 @@ local autocmds = {
 		end,
 	},
 	{
+		"BufEnter",
+		"*",
+    function()
+			vim.opt.formatoptions = {
+				["1"] = false,
+				["2"] = false, -- Use indent from 2nd line of a paragraph
+				q = true, -- continue comments with gq"
+				c = false, -- Auto-wrap comments using textwidth
+				r = false, -- Continue comments when pressing Enter
+				o = false, -- same as above but on O/o
+				n = true, -- Recognize numbered lists
+				t = false, -- autowrap lines using text width value
+				j = true, -- remove a comment leader when joining lines.
+				-- Only break if the line was not longer than 'textwidth' when the insert
+				-- started and only at a white character that has been entered during the
+				-- current insert command.
+				l = true,
+				v = true,
+			}
+    end
+	},
+	{
 		"FileType",
 		{ "cpp", "c", "objc", "objcpp" },
 		function()
@@ -409,22 +437,22 @@ local autocmds = {
 		"FileType",
 		{ "cpp", "c", "objc", "objcpp" },
 		function()
-vim.opt.formatoptions = {
-	["1"] = false,
-	["2"] = false, -- Use indent from 2nd line of a paragraph
-	q = true, -- continue comments with gq"
-	c = false, -- Auto-wrap comments using textwidth
-	r = false, -- Continue comments when pressing Enter
-	o = false, -- same as above but on O/o
-	n = true, -- Recognize numbered lists
-	t = false, -- autowrap lines using text width value
-	j = true, -- remove a comment leader when joining lines.
-	-- Only break if the line was not longer than 'textwidth' when the insert
-	-- started and only at a white character that has been entered during the
-	-- current insert command.
-	l = true,
-	v = true,
-}
+			vim.opt.formatoptions = {
+				["1"] = false,
+				["2"] = false, -- Use indent from 2nd line of a paragraph
+				q = true, -- continue comments with gq"
+				c = false, -- Auto-wrap comments using textwidth
+				r = false, -- Continue comments when pressing Enter
+				o = false, -- same as above but on O/o
+				n = true, -- Recognize numbered lists
+				t = false, -- autowrap lines using text width value
+				j = true, -- remove a comment leader when joining lines.
+				-- Only break if the line was not longer than 'textwidth' when the insert
+				-- started and only at a white character that has been entered during the
+				-- current insert command.
+				l = true,
+				v = true,
+			}
 			-- vim.cmd("nmap <M-o> <cmd>ClangdSwitchSourceHeader<cr>")
 		end,
 	},
@@ -443,7 +471,5 @@ require("lvim.lsp.manager").setup("omnisharp", {
 		return util.root_pattern("*.csproj", "*.sln")(fname)
 	end,
 })
-
-require("lvim.lsp.manager").setup("tailwindcss", require("lvim.lsp.providers.tailwindcss"))
 
 require("user.null_lsp")

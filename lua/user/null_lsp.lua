@@ -19,6 +19,7 @@ if nls_ok then
       }),
 			nls.builtins.formatting.prettierd,
 			nls.builtins.diagnostics.vint,
+			nls.builtins.formatting.ruff_format,
 		},
 	})
 end

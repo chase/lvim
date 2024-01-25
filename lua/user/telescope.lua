@@ -86,7 +86,8 @@ function M.config()
     '%.jar',
     '%.docx',
     '%.met',
-    'smalljre_*/*'
+    'smalljre_*/*',
+    "messages.po",
   }
 end
 

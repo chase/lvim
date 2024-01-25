@@ -15,8 +15,30 @@ lvim.keys = {
 		["<C-`>"] = function()
 			require("user.terminal").toggle()
 		end,
-		["<A-j>"] = false,
-		["<A-k>"] = false,
+		["<C-j>"] = function()
+			require("smart-splits").move_cursor_down()
+		end,
+		["<C-k>"] = function()
+			require("smart-splits").move_cursor_up()
+		end,
+		["<C-h>"] = function()
+			require("smart-splits").move_cursor_left()
+		end,
+		["<C-l>"] = function()
+			require("smart-splits").move_cursor_right()
+		end,
+		["<A-j>"] = function()
+			require("smart-splits").resize_down()
+		end,
+		["<A-k>"] = function()
+			require("smart-splits").resize_up()
+		end,
+		["<A-h>"] = function()
+			require("smart-splits").resize_left()
+		end,
+		["<A-l>"] = function()
+			require("smart-splits").resize_right()
+		end,
 		["]c"] = function()
 			require("gitsigns").next_hunk()
 		end,
@@ -25,8 +47,8 @@ lvim.keys = {
 		end,
 		["H"] = "<cmd>BufferLineCyclePrev<cr>",
 		["L"] = "<cmd>BufferLineCycleNext<cr>",
-		["]x"] = '<Plug>(git-conflict-next-conflict)',
-		["[x"] = '<Plug>(git-conflict-prev-conflict)',
+		["]x"] = "<Plug>(git-conflict-next-conflict)",
+		["[x"] = "<Plug>(git-conflict-prev-conflict)",
 	},
 	visual_mode = {
 		["<A-j>"] = false,
@@ -58,18 +80,18 @@ lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Project
 lvim.builtin.which_key.mappings["z"] = {
 	function()
 		require("user.zoxide").list()
-    vim.schedule(function ()
-        require("project_nvim.project").on_buf_enter()
-    end)
+		vim.schedule(function()
+			require("project_nvim.project").on_buf_enter()
+		end)
 	end,
 	"Zoxide",
 }
 lvim.builtin.which_key.mappings["Z"] = {
 	function()
 		require("user.zoxide").list(true)
-    vim.schedule(function ()
-        require("project_nvim.project").on_buf_enter()
-    end)
+		vim.schedule(function()
+			require("project_nvim.project").on_buf_enter()
+		end)
 	end,
 	"Zoxide (Search File)",
 }
@@ -85,9 +107,9 @@ lvim.builtin.which_key.mappings.g.g = {
 lvim.builtin.which_key.mappings["r"] = {
 	function()
 		require("fzf-lua").oldfiles({ cwd_only = true })
-    vim.schedule(function ()
-        require("project_nvim.project").on_buf_enter()
-    end)
+		vim.schedule(function()
+			require("project_nvim.project").on_buf_enter()
+		end)
 	end,
 	"Recent Files",
 }
@@ -103,6 +125,10 @@ lvim.builtin.which_key.mappings.s.t = {
 lvim.builtin.which_key.mappings.l.e = {
 	vim.diagnostic.open_float,
 	"Line Diagnostics",
+}
+lvim.builtin.which_key.mappings.g.c = {
+	":GitConflictListQf<cr>",
+	"Git Conflict List",
 }
 lvim.builtin.which_key.mappings["gh"] = {
 	function()

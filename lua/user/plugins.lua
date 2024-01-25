@@ -6,7 +6,7 @@ return {
 			require("nvim-surround").setup()
 		end,
 	},
-	{ "knubie/vim-kitty-navigator" },
+	{ "mrjones2014/smart-splits.nvim", build = "./kitty/install-kittens.bash" },
 	{
 		name = "nvim-colorizer",
 		dir = "~/OSS/nvim-colorizer.lua",
@@ -27,11 +27,15 @@ return {
 		"kosayoda/nvim-lightbulb",
 		event = "BufRead",
 		config = function()
-			---@diagnostic disable-next-line: param-type-mismatch, redundant-parameter
-			vim.fn.sign_define("LightBulbSign", { text = "", texthl = "YellowSign" })
 			vim.cmd([[
       autocmd CursorHold,CursorHoldI * lua if #vim.lsp.buf_get_clients() > 1 then require'nvim-lightbulb'.update_lightbulb() end
       ]])
+			require("nvim-lightbulb").setup({
+				sign = {
+					text = "",
+					hl = "YellowSign",
+				},
+			})
 		end,
 	},
 	-- {
@@ -155,6 +159,7 @@ return {
 	-- { "kevinhwang91/nvim-bqf", ft = "qf" },
 	{
 		"stevearc/dressing.nvim",
+		dir = "~/OSS/dressing.nvim",
 		dependencies = { "nvim-telescope/telescope.nvim" },
 		config = function()
 			require("user.dressing").config()
@@ -227,24 +232,51 @@ return {
 	},
 	{
 		url = "https://github.com/yorickpeterse/nvim-pqf",
-		config = function()
-			require("pqf").setup()
-		end,
+		config = true,
 	},
 	{
 		"simrat39/rust-tools.nvim",
-    lazy = true,
+		lazy = true,
 		config = function()
 			require("user.rust_tools").config()
 		end,
-    ft = { "rust", "rs" }
+		ft = { "rust", "rs" },
 	},
 	{
 		"saecki/crates.nvim",
 		event = { "BufRead Cargo.toml" },
 		dependencies = { { "nvim-lua/plenary.nvim" } },
-		config = function()
-			require("crates").setup {}
-		end,
+		config = true,
 	},
+	{
+		name = "ts-cpp-tools",
+		dir = "~/OSS/nvim-treesitter-cpp-tools",
+		ft = {
+			"cpp",
+		},
+		opts = {
+			preview = {
+				quit = "<esc>",
+				accept = "<cr>",
+			},
+		},
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+	},
+	{
+		name = "gn-vim",
+		dir = "~/OSS/gn-vim",
+	},
+  -- {
+  --   "lukas-reineke/indent-blankline.nvim",
+  --   name = "new-indent",
+  --   main = "ibl",
+  --   -- enabled = ~vim.builtin.indentlines.active,
+  -- },
+  {
+    "shellRaining/hlchunk.nvim",
+    event = { "UIEnter" },
+    config = function ()
+      require("user.hlchunk").setup()
+    end
+  }
 }

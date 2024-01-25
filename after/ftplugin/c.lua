@@ -1,8 +1,8 @@
 local opts = {}
 local clangd_flags = {
-  "--background-index",
+  "--background-index=0",
   "--fallback-style=google",
-  "-j=4",
+  "-j=2",
   "--all-scopes-completion",
   "--pch-storage=disk",
   "--clang-tidy",
@@ -13,15 +13,15 @@ local clangd_flags = {
   "--enable-config",
   "--offset-encoding=utf-16",
   "--ranking-model=heuristics",
-  "--query-driver=/usr/bin/g++-11,/usr/bin/clang-*"
+  "--query-driver=/usr/bin/clang-*,/usr/bin/g++-11"
 }
 
 local provider = "clangd"
 
 local custom_on_attach = function(client, bufnr)
   require("lvim.lsp").common_on_attach(client, bufnr)
-  require("clangd_extensions.inlay_hints").setup_autocmd()
-  require("clangd_extensions.inlay_hints").set_inlay_hints()
+  -- require("clangd_extensions.inlay_hints").setup_autocmd()
+  -- require("clangd_extensions.inlay_hints").set_inlay_hints()
 end
 
 local status_ok, project_config = pcall(require, "rhel.clangd_wrl")
@@ -36,8 +36,15 @@ end
 
 opts = {
   cmd = { provider, unpack(clangd_flags) },
+  root_dir = function(fname)
+    local util = require("lspconfig.util")
+    return util.root_pattern(".gn", "compile_commands.json", ".clangd", ".git")(fname)
+  end,
   on_attach = custom_on_attach,
   on_init = custom_on_init,
+  filetypes = {
+    "cpp", "cxx", "cc", "c", "hxx", "h"
+  }
 }
 
 require("lvim.lsp.manager").setup("clangd", opts)
